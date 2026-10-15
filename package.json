@@ -1,0 +1,8 @@
+{
+  "name": "fixnow-static-build",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": { "build": "node tools/build.mjs" },
+  "devDependencies": { "esbuild": "0.28.2", "three": "0.170.0" }
+}
