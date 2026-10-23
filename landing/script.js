@@ -1,6 +1,6 @@
 /* Source artboard interactions, translated to native DOM controls. */
 'use strict';
-const diagnosticData = {"desktop": [{"num": "01", "title": "Pantalla", "symptom": "Vidrio roto, manchas o sin imagen.", "time": "30 min aprox.", "zone": {"top": "4px", "left": "4px", "w": "158px", "h": "328px", "r": "26px"}}, {"num": "02", "title": "Batería", "symptom": "Se descarga rápido o no carga.", "time": "25 min aprox.", "zone": {"top": "110px", "left": "30px", "w": "106px", "h": "170px", "r": "12px"}}, {"num": "03", "title": "Vidrio trasero", "symptom": "Roto o con fisuras.", "time": "Entre 1 y 3 h según el modelo", "zone": {"top": "-8px", "left": "-8px", "w": "182px", "h": "352px", "r": "36px"}}, {"num": "04", "title": "Carga", "symptom": "No carga, carga lento o se corta.", "time": "Consultá por WhatsApp", "zone": {"top": "300px", "left": "55px", "w": "56px", "h": "38px", "r": "10px"}}, {"num": "05", "title": "Cámara", "symptom": "Fotos borrosas o no funciona.", "time": "Consultá por WhatsApp", "zone": {"top": "14px", "left": "14px", "w": "70px", "h": "70px", "r": "18px"}}, {"num": "06", "title": "Equipo mojado", "symptom": "No enciende o presenta fallas. Apagalo y traelo cuanto antes.", "time": "Consultá por WhatsApp", "zone": {"top": "60px", "left": "20px", "w": "126px", "h": "250px", "r": "50%"}}], "mobile": [{"num": "01", "title": "Pantalla", "symptom": "Vidrio roto, manchas o sin imagen.", "time": "30 min aprox.", "zone": {"top": "3px", "left": "3px", "w": "120px", "h": "250px", "r": "20px"}}, {"num": "02", "title": "Batería", "symptom": "Se descarga rápido o no carga.", "time": "25 min aprox.", "zone": {"top": "84px", "left": "23px", "w": "80px", "h": "130px", "r": "9px"}}, {"num": "03", "title": "Vidrio trasero", "symptom": "Roto o con fisuras.", "time": "Entre 1 y 3 h según el modelo", "zone": {"top": "-7px", "left": "-7px", "w": "140px", "h": "270px", "r": "28px"}}, {"num": "04", "title": "Carga", "symptom": "No carga, carga lento o se corta.", "time": "Consultá por WhatsApp", "zone": {"top": "228px", "left": "42px", "w": "42px", "h": "30px", "r": "8px"}}, {"num": "05", "title": "Cámara", "symptom": "Fotos borrosas o no funciona.", "time": "Consultá por WhatsApp", "zone": {"top": "10px", "left": "10px", "w": "54px", "h": "54px", "r": "14px"}}, {"num": "06", "title": "Equipo mojado", "symptom": "No enciende o presenta fallas. Apagalo y traelo cuanto antes.", "time": "Lo antes posible", "zone": {"top": "46px", "left": "15px", "w": "96px", "h": "190px", "r": "50%"}}]};
+const diagnosticData = {"desktop": [{"num": "01", "title": "Pantalla", "symptom": "Vidrio roto, manchas o sin imagen.", "time": "Desde 30 min", "zone": {"top": "4px", "left": "4px", "w": "158px", "h": "328px", "r": "26px"}}, {"num": "02", "title": "Batería", "symptom": "Se descarga rápido o no carga.", "time": "Desde 20 min", "zone": {"top": "110px", "left": "30px", "w": "106px", "h": "170px", "r": "12px"}}, {"num": "03", "title": "Vidrio trasero", "symptom": "Roto o con fisuras.", "time": "Entre 1 y 3 h según el modelo", "zone": {"top": "-8px", "left": "-8px", "w": "182px", "h": "352px", "r": "36px"}}, {"num": "04", "title": "Carga", "symptom": "No carga, carga lento o se corta.", "time": "Consultá por WhatsApp", "zone": {"top": "300px", "left": "55px", "w": "56px", "h": "38px", "r": "10px"}}, {"num": "05", "title": "Cámara", "symptom": "Fotos borrosas o no funciona.", "time": "Consultá por WhatsApp", "zone": {"top": "14px", "left": "14px", "w": "70px", "h": "70px", "r": "18px"}}, {"num": "06", "title": "Equipo mojado", "symptom": "No enciende o presenta fallas. Apagalo y traelo cuanto antes.", "time": "Consultá por WhatsApp", "zone": {"top": "60px", "left": "20px", "w": "126px", "h": "250px", "r": "50%"}}], "mobile": [{"num": "01", "title": "Pantalla", "symptom": "Vidrio roto, manchas o sin imagen.", "time": "Desde 30 min", "zone": {"top": "3px", "left": "3px", "w": "120px", "h": "250px", "r": "20px"}}, {"num": "02", "title": "Batería", "symptom": "Se descarga rápido o no carga.", "time": "Desde 20 min", "zone": {"top": "84px", "left": "23px", "w": "80px", "h": "130px", "r": "9px"}}, {"num": "03", "title": "Vidrio trasero", "symptom": "Roto o con fisuras.", "time": "Entre 1 y 3 h según el modelo", "zone": {"top": "-7px", "left": "-7px", "w": "140px", "h": "270px", "r": "28px"}}, {"num": "04", "title": "Carga", "symptom": "No carga, carga lento o se corta.", "time": "Consultá por WhatsApp", "zone": {"top": "228px", "left": "42px", "w": "42px", "h": "30px", "r": "8px"}}, {"num": "05", "title": "Cámara", "symptom": "Fotos borrosas o no funciona.", "time": "Consultá por WhatsApp", "zone": {"top": "10px", "left": "10px", "w": "54px", "h": "54px", "r": "14px"}}, {"num": "06", "title": "Equipo mojado", "symptom": "No enciende o presenta fallas. Apagalo y traelo cuanto antes.", "time": "Lo antes posible", "zone": {"top": "46px", "left": "15px", "w": "96px", "h": "190px", "r": "50%"}}]};
 // Main WhatsApp (Belgrano). Repair buttons add the selected service to the message.
 const whatsappLink = text => 'https://wa.me/5491156327284?text=' + encodeURIComponent(text);
 function syncConsultLinks(service) {
@@ -32,7 +32,6 @@ function selectIssue(index, options = {}) {
   syncConsultLinks(issue.title);
   updateExplodedPhone(root, index, issue.title, options);
   syncRepairReplay();
-  scheduleWhatsAppPosition();
 }
 function syncRepairReplay() {
   const root = document.getElementById('diagnostico');
@@ -65,21 +64,66 @@ function makeMenuOutsideInert(active) {
     menuOutsideState.clear();
   }
 }
-function closeMenu() {
-  if (menu.hidden) return;
-  menu.hidden = true;
-  makeMenuOutsideInert(false);
-  opener.setAttribute('aria-expanded', 'false');
-  document.body.style.overflow = previousOverflow;
-  opener.focus();
+let menuAnimations = [];
+let menuTransition = 0;
+let menuClosing = false;
+function cancelMenuAnimations() {
+  menuAnimations.forEach(animation => animation.cancel());
+  menuAnimations = [];
+}
+function closeMenu({immediate = false} = {}) {
+  if (menu.hidden || (menuClosing && !immediate)) return;
+  const transition = ++menuTransition;
+  cancelMenuAnimations();
+  menuClosing = true;
+  const finish = () => {
+    if (transition !== menuTransition) return;
+    menu.hidden = true;
+    menuClosing = false;
+    cancelMenuAnimations();
+    makeMenuOutsideInert(false);
+    opener.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = previousOverflow;
+    // Keep an anchor link's destination in view when the closing fade finishes.
+    if (opener.getClientRects().length) opener.focus({preventScroll: true});
+  };
+  if (immediate || typeof menu.animate !== 'function') { finish(); return; }
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const animation = menu.animate([
+    {clipPath: 'inset(0 0 0 0)', opacity: 1},
+    {clipPath: reduced ? 'inset(0 0 0 0)' : 'inset(0 0 100% 0)', opacity: reduced ? 0 : 1}
+  ], {duration: reduced ? 100 : 320, easing: 'cubic-bezier(.77,0,.175,1)', fill: 'both'});
+  menuAnimations.push(animation);
+  animation.finished.then(finish).catch(() => {});
+  // Safety net: finish even if the browser throttles animations (e.g. a background tab).
+  setTimeout(finish, (reduced ? 100 : 320) + 120);
 }
 opener.addEventListener('click', () => {
-  previousOverflow = document.body.style.overflow;
-  menu.hidden = false;
+  if (!menu.hidden && !menuClosing) return;
+  const wasHidden = menu.hidden;
+  ++menuTransition;
+  cancelMenuAnimations();
+  menuClosing = false;
+  if (wasHidden) {
+    previousOverflow = document.body.style.overflow;
+    menu.hidden = false;
+    makeMenuOutsideInert(true);
+  }
   opener.setAttribute('aria-expanded', 'true');
   document.body.style.overflow = 'hidden';
   closer.focus();
-  makeMenuOutsideInert(true);
+  if (typeof menu.animate !== 'function') return;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  menuAnimations.push(menu.animate([
+    {clipPath: reduced ? 'inset(0 0 0 0)' : 'inset(0 0 100% 0)', opacity: reduced ? 0 : 1},
+    {clipPath: 'inset(0 0 0 0)', opacity: 1}
+  ], {duration: reduced ? 120 : 420, easing: 'cubic-bezier(.77,0,.175,1)', fill: 'both'}));
+  if (!reduced) menu.querySelectorAll('.mlink, .s212').forEach((link, index) => {
+    menuAnimations.push(link.animate([
+      {opacity: 0, transform: 'translateY(18px)'},
+      {opacity: 1, transform: 'translateY(0)'}
+    ], {duration: 360, delay: 160 + index * 45, easing: 'ease-out', fill: 'both'}));
+  });
 });
 closer.addEventListener('click', closeMenu);
 menu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
@@ -93,7 +137,7 @@ document.addEventListener('keydown', event => {
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   }
 });
-window.matchMedia('(min-width: 900px)').addEventListener('change', event => { if (event.matches) closeMenu(); selectIssue(selectedIssue); });
+window.matchMedia('(min-width: 900px)').addEventListener('change', event => { if (event.matches) closeMenu({immediate: true}); selectIssue(selectedIssue); });
 
 
 // Original conceptual phone layers share the diagnostic buttons as their only controls.
@@ -136,61 +180,19 @@ if ('IntersectionObserver' in window) {
   phoneVisuals.forEach(visual => { if (![0, 2].includes(Number(visual.dataset.fallbackIssue ?? 0))) visual.classList.add('is-revealed'); });
 }
 
-// Keep the floating contact button off text and controls: lift it to the nearest free spot
-// above its resting place, or tuck it away until the content under it has scrolled past.
+// The hero has its own WhatsApp button; after it scrolls away the floating one stays on screen.
 const whatsappFloat = document.querySelector('.whatsapp-float');
-const FLOAT_GAP = 10, FLOAT_MAX_LIFT = 260, FLOAT_STEP = 4;
-const decorative = '.whatsapp-float, .bigword, .s58, .s162, .site-header, .menu-dialog';
-function coversContent(x, y) {
-  for (const el of document.elementsFromPoint(x, y)) {
-    if (el.closest(decorative)) continue;
-    if (el.closest('a, button, input, select, textarea, [role="button"]')) return true;
-    for (const node of el.childNodes) {
-      if (node.nodeType !== 3 || !node.textContent.trim()) continue;
-      const range = document.createRange();
-      range.selectNodeContents(node);
-      for (const r of range.getClientRects()) if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return true;
-    }
-  }
-  return false;
+const inlineWhatsApp = document.querySelectorAll('.real-hero .hero-cta-primary');
+if (whatsappFloat && inlineWhatsApp.length && 'IntersectionObserver' in window) {
+  const onScreen = new Set();
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => { if (entry.isIntersecting) onScreen.add(entry.target); else onScreen.delete(entry.target); });
+    const hide = onScreen.size > 0;
+    whatsappFloat.classList.toggle('is-hero', hide);
+    whatsappFloat.tabIndex = hide ? -1 : 0;
+  });
+  inlineWhatsApp.forEach(cta => observer.observe(cta));
 }
-function positionWhatsApp() {
-  whatsappFloat.style.setProperty('--wa-lift', '0px');
-  const home = whatsappFloat.getBoundingClientRect();
-  const headerBottom = document.querySelector('.site-header').getBoundingClientRect().bottom;
-  const xs = [home.left - 6, home.left + 6, home.left + home.width / 2, home.right - 4];
-  // Mark each sampled row of the column above the button as free or blocked.
-  const rows = [];
-  for (let y = home.bottom + FLOAT_GAP; y >= home.top - FLOAT_MAX_LIFT - FLOAT_GAP; y -= FLOAT_STEP) {
-    rows.push({y, blocked: y < headerBottom || xs.some(x => coversContent(x, y))});
-  }
-  let lift = null;
-  for (let l = 0; l <= FLOAT_MAX_LIFT; l += FLOAT_STEP) {
-    const top = home.top - l - FLOAT_GAP, bottom = home.bottom - l + FLOAT_GAP;
-    if (!rows.some(row => row.blocked && row.y >= top && row.y <= bottom)) { lift = l; break; }
-  }
-  const tucked = lift === null;
-  whatsappFloat.classList.toggle('is-tucked', tucked);
-  whatsappFloat.tabIndex = tucked ? -1 : 0;
-  whatsappFloat.style.setProperty('--wa-lift', (tucked ? 0 : lift) + 'px');
-}
-// Measure after scrolling settles (including the mobile snap), not on every frame.
-let floatTimer = 0;
-function scheduleWhatsAppPosition() {
-  clearTimeout(floatTimer);
-  floatTimer = setTimeout(() => requestAnimationFrame(positionWhatsApp), 90);
-}
-window.addEventListener('scroll', scheduleWhatsAppPosition, {passive: true});
-window.addEventListener('scrollend', scheduleWhatsAppPosition);
-// Reveal animations move text after a scroll settles; measure again once they finish.
-document.addEventListener('transitionend', scheduleWhatsAppPosition, {passive: true});
-document.addEventListener('animationend', scheduleWhatsAppPosition, {passive: true});
-if ('ResizeObserver' in window) new ResizeObserver(scheduleWhatsAppPosition).observe(document.body);
-window.addEventListener('resize', scheduleWhatsAppPosition);
-window.addEventListener('load', scheduleWhatsAppPosition);
-if (document.fonts) document.fonts.ready.then(scheduleWhatsAppPosition);
-scheduleWhatsAppPosition();
-
 
 // The real-photo hero needs no WebGL. Only the service illustration loads a 3D scene.
 let phone3DModule;
@@ -239,6 +241,10 @@ async function loadPhoneScene(visual, optedIn = false) {
   if (!canUseWebGL2) { visual.classList.add('phone3d-failed'); return; }
   phone3DHosts.add(visual);
   nearObserver?.unobserve(visual);
+  // Mount at the start of the repair instead of the finished result. The scene only advances
+  // while it is on screen, so the repair plays once when the visitor reaches it, not off screen.
+  // It is a single bounded playback (like the replay button), so it also runs with reduced motion.
+  if (!visual.dataset.playRequested) visual.dataset.playRequested = 'true';
   try {
     phone3DModule ||= import('./assets/phone3d.js?v=20261015181305');
     const loader = showPhoneLoading(visual);
@@ -248,7 +254,6 @@ async function loadPhoneScene(visual, optedIn = false) {
     if (!await module.mountPhone3D(visual, {onProgress: loader, probe})) throw new Error('3D unavailable');
     visual.addEventListener('phone-selection-error', syncRepairReplay);
     syncRepairReplay();
-    scheduleWhatsAppPosition();
   } catch {
     // Stop the loader and retain the selected phone poster.
     visual.classList.remove('phone3d-ready');
@@ -258,10 +263,13 @@ async function loadPhoneScene(visual, optedIn = false) {
   }
 }
 // The 3D assets are heavy: start only after the page has loaded and the browser is idle,
-// so text, images and first paint are never delayed. Each phone then loads when it nears the viewport.
+// so text, images and first paint are never delayed. Then preload the repair scene right away,
+// so it is ready (no poster, no loader) by the time the visitor scrolls to it.
+// On very slow connections it still waits until the phone nears the viewport.
 function startPhoneScenes() {
   if (phoneScenesStarted) return;
   phoneScenesStarted = true;
+  if (!/2g/.test(navigator.connection?.effectiveType || '')) sceneHosts.forEach(host => loadPhoneScene(host));
   if ('IntersectionObserver' in window) {
     nearObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => { if (entry.isIntersecting) loadPhoneScene(entry.target); });
@@ -283,6 +291,12 @@ window.addEventListener('resize', () => {
 // Reserve the replay button space from the first paint.
 syncRepairReplay();
 
+// Desktop header is transparent over the hero photo and gets its background once the page scrolls.
+const siteHeader = document.querySelector('.site-header');
+function syncHeaderBackground() { siteHeader?.classList.toggle('is-scrolled', window.scrollY > 8); }
+window.addEventListener('scroll', syncHeaderBackground, {passive: true});
+syncHeaderBackground();
+
 // Keep anchor jumps landing exactly below the sticky header, whatever its height on this device.
 function syncHeaderHeight() {
   const header = document.querySelector('.site-header');
@@ -291,13 +305,106 @@ function syncHeaderHeight() {
 syncHeaderHeight();
 window.addEventListener('resize', syncHeaderHeight);
 
+// FAQ: animate the answer open and closed instead of the native instant jump.
+document.querySelectorAll('.faq-list details').forEach(item => {
+  const summary = item.querySelector('summary');
+  const answer = item.querySelector('summary + p');
+  if (item.open) item.classList.add('is-open');
+  let animation;
+  summary.addEventListener('click', event => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !answer.animate) {
+      requestAnimationFrame(() => item.classList.toggle('is-open', item.open));
+      return;
+    }
+    event.preventDefault();
+    animation?.cancel();
+    const opening = !item.classList.contains('is-open');
+    item.classList.toggle('is-open', opening);
+    if (opening) item.open = true;
+    const height = answer.scrollHeight;
+    const pad = getComputedStyle(answer).paddingBottom;
+    const shut = {height: '0px', paddingBottom: '0px', opacity: 0}, full = {height: height + 'px', paddingBottom: pad, opacity: 1};
+    animation = answer.animate(opening ? [shut, full] : [full, shut],
+      {duration: opening ? 260 : 200, easing: 'cubic-bezier(.2,.7,.2,1)'}
+    );
+    const current = animation;
+    const done = () => { if (animation !== current) return; if (!opening) item.open = false; current.cancel(); animation = null; };
+    animation.onfinish = done;
+    // Safety net: finish even if the browser throttles animations (e.g. a background tab).
+    setTimeout(done, 400);
+  });
+});
+
+// Mobile branches: one full-width card at a time. The title and the name buttons follow the card in view,
+// and tapping a name scrolls to that branch.
+const branchSnap = document.getElementById('branch-snap');
+if (branchSnap) {
+  const cards = [...branchSnap.querySelectorAll('.bcard')];
+  const tabs = [...document.querySelectorAll('[data-branch-dot]')];
+  const title = document.querySelector('.branch-title');
+  let shown = -1;
+  const current = () => Math.round(branchSnap.scrollLeft / Math.max(1, cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : branchSnap.clientWidth));
+  // While a tapped name scrolls to its card, keep showing that name (not the cards slid past on the way).
+  let lockTo = null, lockTimer = 0;
+  const show = i => {
+    if (i === shown) return;
+    shown = i;
+    tabs.forEach((tab, n) => tab.setAttribute('aria-pressed', String(n === i)));
+    if (title) {
+      title.textContent = tabs[i].textContent + '.';
+      title.classList.remove('is-swapping'); void title.offsetWidth; title.classList.add('is-swapping');
+    }
+  };
+  const sync = () => {
+    const i = Math.max(0, Math.min(cards.length - 1, current()));
+    if (lockTo !== null) { if (i === lockTo) lockTo = null; return; }
+    show(i);
+  };
+  let snapRestore = 0;
+  tabs.forEach((tab, n) => tab.addEventListener('click', () => {
+    const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    lockTo = n;
+    clearTimeout(lockTimer);
+    lockTimer = setTimeout(() => { lockTo = null; sync(); }, 2500);
+    show(n);
+    if (current() === n) lockTo = null;
+    const slide = () => branchSnap.scrollTo({left: cards[n].offsetLeft - cards[0].offsetLeft, behavior});
+    // The whole card must be visible (down to "Cómo llegar"); the section label may go under the header.
+    const label = branchSnap.closest('.mobile').querySelector('.mono');
+    const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height || 0;
+    const labelTarget = scrollY + label.getBoundingClientRect().top - headerHeight - 18;
+    const cardTarget = scrollY + cards[n].getBoundingClientRect().bottom - innerHeight + 16;
+    const target = Math.max(0, labelTarget, cardTarget);
+    if (Math.abs(target - scrollY) < 4) { slide(); return; }
+    // Browsers run one smooth scroll at a time: settle the page first, then slide to the card.
+    // The page's vertical scroll snap would pull this back to the section start, so pause it meanwhile.
+    document.documentElement.style.scrollSnapType = 'none';
+    clearTimeout(snapRestore);
+    let slid = false;
+    const thenSlide = () => { if (slid) return; slid = true; window.removeEventListener('scrollend', thenSlide); slide(); snapRestore = setTimeout(() => { document.documentElement.style.scrollSnapType = ''; }, 900); };
+    window.addEventListener('scrollend', thenSlide);
+    setTimeout(thenSlide, behavior === 'smooth' ? 700 : 0);
+    window.scrollTo({top: target, behavior});
+  }));
+  branchSnap.addEventListener('scroll', sync, {passive: true});
+  sync();
+}
+
 // "Ver todas en el mapa": overview of the four branches in a modal dialog.
 const branchMap = document.getElementById('branch-map');
 if (branchMap && branchMap.showModal) {
   document.querySelectorAll('[data-open-map]').forEach(button => button.addEventListener('click', () => { const overview = branchMap.querySelector('img[data-src]'); if (overview && !overview.hasAttribute('src')) overview.src = overview.dataset.src; branchMap.showModal(); }));
-  branchMap.querySelector('[data-close-map]').addEventListener('click', () => branchMap.close());
+  // Fade and lift the dialog out before it actually closes.
+  const closeMap = () => {
+    if (!branchMap.open || branchMap.classList.contains('is-closing')) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { branchMap.close(); return; }
+    branchMap.classList.add('is-closing');
+    setTimeout(() => { branchMap.classList.remove('is-closing'); branchMap.close(); }, 200);
+  };
+  branchMap.addEventListener('cancel', event => { event.preventDefault(); closeMap(); });
+  branchMap.querySelector('[data-close-map]').addEventListener('click', closeMap);
   // Clicking the dimmed backdrop closes it too.
-  branchMap.addEventListener('click', event => { if (event.target === branchMap) branchMap.close(); });
+  branchMap.addEventListener('click', event => { if (event.target === branchMap) closeMap(); });
 } else {
   document.querySelectorAll('[data-open-map]').forEach(button => { button.hidden = true; });
 }

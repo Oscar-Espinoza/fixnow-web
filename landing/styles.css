@@ -1648,7 +1648,6 @@ img {
   inset: 0;
   z-index: 90;
   background-color: var(--black);
-  animation: mobile-menuin .25s ease both;
   display: flex;
   justify-content: center;
 }
@@ -3249,26 +3248,6 @@ footer a.footer-legal:hover {
   .hero-cta { padding: 13px 15px; font-size: 13px; }
 }
 @media (max-width: 899px) {
-  .hero-shell { display: flex; flex-direction: column; padding: 0; gap: 0; }
-  .hero-copy { width: 100%; max-width: 620px; padding: 30px 20px 22px; }
-  .hero-eyebrow { font-size: 9px; margin-bottom: 18px; }
-  .real-hero h1 { font-size: clamp(44px,11.5vw,68px); }
-  .hero-description { font-size: 14px; line-height: 1.6; margin-top: 18px; max-width: 490px; }
-  .hero-actions { margin-top: 22px; display: grid; grid-template-columns: 1fr; gap: 8px; }
-  .hero-cta { min-height: 48px; font-size: 14px; }
-  .hero-cta-secondary { min-height: 42px; }
-  .hero-workshop { width: 100%; max-width: 620px; }
-  .hero-workshop img { width: 100%; height: auto; aspect-ratio: 800 / 569; object-fit: cover; object-position: center; }
-  .hero-workshop picture { mask-image: none; }
-  .hero-workshop picture::after { background: linear-gradient(0deg,#141414 0%,transparent 12%); }
-  .hero-proof { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 0 20px; }
-  .hero-proof > *, .hero-proof > :first-child { padding: 20px 12px; gap: 5px; border-bottom: 1px solid rgba(255,255,255,.12); }
-  .hero-proof > :nth-child(odd) { padding-left: 0; }
-  .hero-proof > :nth-child(even) { border-right: 0; }
-  .hero-proof > :nth-last-child(-n+2) { border-bottom: 0; }
-  .hero-proof strong { font-size: 23px; }
-  .hero-proof span { font-size: 10px; }
-  .hero-timing-note { font-size: 10px; padding: 8px 20px 20px; text-align: left; }
   .content-wrap { padding: 0 20px; }
   .specialist-section { padding: 36px 0; }
   .specialist-layout { grid-template-columns: 1fr; gap: 18px; }
@@ -3280,3 +3259,325 @@ footer a.footer-legal:hover {
 
 .hero-cash { margin-top: 16px; padding-left: 12px; border-left: 2px solid #4d94ff; color: #d4d8df; font-size: 12px; line-height: 1.6; }
 .hero-cash strong { color: #fff; }
+
+.hero-cash span { display: block; margin-top: 4px; }
+
+/* The menu uses one cancellable transition so closing and breakpoint changes stay in sync. */
+.menu-dialog .swap { animation: none; }
+.mobile .reviews-title { font-size: clamp(30px,8vw,44px); line-height: 1.1 !important; }
+
+/* Process steps on phones: "PASO 0X" label stacked above the title, all on the section's left edge. */
+@media (max-width: 899px) {
+  .mobile .s165, .mobile .s168 { grid-template-columns: minmax(0,1fr); gap: 6px; }
+  .mobile .s166 { font-size: clamp(21px,6.4vw,28px); }
+}
+
+/* Menu logo must sit exactly where the header logo does so opening/closing never resizes it. */
+.menu-dialog .logo { width: 112px; height: 48px; }
+
+/* ---------- Mobile hero: the single source of truth for phones ----------
+   Copy, workshop photo and the four proof pillars fill one screen (svh = the height left
+   with the browser bars showing). The photo absorbs the leftover height; when there is
+   not enough room for it, it is hidden instead of covering the pillars. */
+@media (max-width: 899px) {
+  .hero-shell { display: flex; flex-direction: column; padding: 0; gap: 0; }
+  .hero-copy { width: 100%; max-width: 620px; padding: 20px 20px 14px; }
+  .hero-eyebrow { font-size: 11px; margin-bottom: 10px; }
+  .real-hero h1 { font-size: clamp(34px,10.4vw,48px); }
+  .hero-description { max-width: 490px; margin-top: 10px; font-size: 14px; line-height: 1.5; }
+  .hero-actions { display: flex; flex-direction: column; align-items: stretch; gap: 0; margin-top: 14px; }
+  .hero-cta { min-height: 48px; padding: 12px 16px; font-size: 15px; }
+  .real-hero .hero-cta-secondary { min-height: 44px; padding: 8px 0; border: 0; font-size: 14px; font-weight: 600; color: #d4d8df; text-decoration: underline; text-underline-offset: 4px; }
+  .real-hero .hero-cta-secondary:hover { background: none; color: #fff; }
+  .hero-cash { margin-top: 6px; font-size: 12.5px; line-height: 1.5; }
+  .hero-cash span { margin-top: 2px; }
+
+  .hero-fold { display: flex; flex-direction: column; height: calc(100vh - 61px); height: calc(100svh - 61px); }
+  .hero-fold .hero-shell { flex: 1 1 auto; min-height: 0; }
+  .hero-fold .hero-workshop { flex: 1 1 auto; min-height: 0; width: 100%; max-width: none; padding: 2px 20px 0; }
+  .hero-fold .hero-workshop picture { height: 100%; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,.1); mask-image: none; }
+  .hero-fold .hero-workshop picture::after { display: none; }
+  .hero-fold .hero-workshop img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; object-position: center 40%; }
+
+  .hero-fold .hero-proof { flex: 0 0 auto; grid-template-columns: repeat(2,minmax(0,1fr)); max-width: none; margin: 4px 0 0; padding: 0 20px; border-top: 0; }
+  .hero-proof > *, .hero-proof > :first-child { padding: 12px 12px; gap: 4px; border-bottom: 1px solid rgba(255,255,255,.12); }
+  .hero-proof > :nth-child(odd) { padding-left: 0; }
+  .hero-proof > :nth-child(even) { border-right: 0; }
+  .hero-proof > :nth-last-child(-n+2) { border-bottom: 0; }
+  .hero-proof strong { font-size: 23px; }
+  .hero-proof span { font-size: 12px; }
+  .hero-timing-note { font-size: 12px; padding: 4px 20px 20px; text-align: left; }
+}
+/* Short screens: tighten spacing first. */
+@media (max-width: 899px) and (max-height: 700px) {
+  .hero-copy { padding-top: 14px; padding-bottom: 10px; }
+  .hero-eyebrow { margin-bottom: 6px; }
+  .real-hero h1 { font-size: clamp(32px,9.6vw,40px); }
+  .hero-actions { margin-top: 10px; }
+  .hero-proof > *, .hero-proof > :first-child { padding-top: 9px; padding-bottom: 9px; }
+  .hero-proof strong { font-size: 21px; }
+}
+/* Short screens: the four pillars share one row so the photo keeps its height. */
+@media (max-width: 899px) and (max-height: 780px) {
+  .hero-fold .hero-proof { grid-template-columns: repeat(4,minmax(0,1fr)); }
+  .hero-fold .hero-proof > * { padding: 10px 6px 12px 8px; border-bottom: 0; border-right: 1px solid rgba(255,255,255,.12); }
+  .hero-fold .hero-proof > :first-child { padding-left: 0; }
+  .hero-fold .hero-proof > :last-child { border-right: 0; }
+  .hero-fold .hero-proof strong { font-size: clamp(15px,4.4vw,19px); letter-spacing: -.035em; white-space: nowrap; }
+  .hero-fold .hero-proof span { font-size: 11px; line-height: 1.35; }
+}
+/* Too short for a useful photo (e.g. iPhone SE with Safari bars): drop it rather than squeeze it. */
+@media (max-width: 899px) and (max-height: 600px) {
+  .hero-fold { height: auto; }
+  .hero-fold .hero-workshop { display: none; }
+}
+
+/* Floating WhatsApp: WhatsApp green, never moves; hidden while another WhatsApp CTA is on screen. */
+.whatsapp-float { background: #25D366; box-shadow: 0 6px 20px rgba(0,0,0,.35); transition: opacity .2s ease, background .2s ease; }
+.whatsapp-float:hover { background: #1ebe5b; }
+.whatsapp-float.is-hero { opacity: 0; pointer-events: none; }
+
+/* Branch cards: WhatsApp is the main action, directions a secondary link. */
+.bcard .branch-wa { display: flex; align-items: center; justify-content: center; min-height: 48px; margin-top: 12px; padding: 0 16px; font-size: 15px; font-weight: 700; letter-spacing: 0; text-decoration: none; color: #fff; border-radius: 4px; }
+.branch-directions { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 600; color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
+
+/* Tap targets: every small text link gets a 44px hit area. */
+.footer-links a, .footer-legal, .review-source, .footer-ig a { display: inline-flex; align-items: center; min-height: 44px; }
+/* Inline link inside a paragraph: grow the hit area with padding, which does not change the line height. */
+.why a[href="#garantia"] { padding: 12px 4px; margin: -12px -4px; }
+.footer-links a, .footer-legal { font-size: 13px; }
+.footer-ig a { flex-direction: column; align-items: flex-start; justify-content: center; }
+
+/* Accesorios: real icon instead of the dashed placeholder, and a way to act on it. */
+.acc-icon { display: flex; align-items: center; justify-content: center; border: 0 !important; background: none !important; }
+.acc-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; margin-top: 20px; padding: 0 22px; font-size: 15px; font-weight: 700; color: #fff; text-decoration: none; border-radius: 4px; }
+.mobile .acc-cta { display: flex; width: 100%; }
+
+/* Specialist: short intro, his face sits inline with the title. */
+.specialist-layout { display: block; }
+.specialist-head { display: flex; align-items: center; gap: 16px; }
+.specialist-avatar { position: relative; flex: 0 0 auto; display: block; width: 72px; height: 72px; overflow: hidden; border-radius: 50%; border: 2px solid #78aeff; background: #1b1e24; }
+/* Crop the workshop photo to Jhon's head and shoulders. */
+.specialist-avatar img { position: absolute; width: 307%; max-width: none; height: auto; left: -173%; top: -27%; }
+.specialist-section .specialist-note { margin: 14px 0 0; font-size: 15px; font-weight: 400; letter-spacing: 0; text-transform: none; color: #ccc; line-height: 1.5; }
+@media (max-width: 899px) {
+  .specialist-head { gap: 14px; }
+  .specialist-avatar { width: 60px; height: 60px; }
+  .specialist-section h2 { font-size: clamp(22px,6.6vw,30px); }
+}
+
+/* Headings: FAQ and specialist follow the same uppercase display style as the other sections. */
+.faq-section h2, .specialist-section h2 { text-transform: uppercase; letter-spacing: -.035em; }
+
+/* Repair panel: legal small print goes after the actions, not before the key facts. */
+.diagnostic-detail .service-conditions { order: 5; font-size: 12px !important; }
+
+/* Desktop hero copy starts on the same left edge as the header and sections. */
+@media (min-width: 900px) {
+  /* % padding resolves against the section width (no scrollbar), matching .wrap exactly. */
+  .hero-shell { padding-left: max(40px, calc((100% - 1280px) / 2 + 40px)); }
+}
+
+/* ¿Por qué FixNow? on phones: icon + code on one row, title and text on the section's left edge. */
+@media (max-width: 899px) {
+  .mobile .why { grid-template-columns: auto minmax(0,1fr); column-gap: 8px; row-gap: 0; align-items: center; }
+  .mobile .why > span:last-child { display: contents; }
+  .mobile .why .s171 { width: auto; height: auto; border: 0; background: none; }
+  .mobile .why .s171 svg { width: 22px; height: 22px; }
+  .mobile .why .s68 { font-size: 11px; }
+  .mobile .why h3, .mobile .why p { grid-column: 1 / -1; }
+  .mobile .why h3 { margin-top: 10px; font-size: clamp(19px,5.8vw,22px); }
+}
+
+/* ---------- Stats bar: the original FixNow style (big, heavy, uppercase display numbers) ---------- */
+.hero-proof strong { font-size: 44px; line-height: 1; text-transform: uppercase; letter-spacing: -.03em; }
+.hero-proof strong em { font-style: normal; color: #4d94ff; font-size: .55em; vertical-align: .55em; margin-left: 2px; }
+.hero-proof span.mono { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: #b8c1ce; }
+.hero-proof a:hover strong { color: #78aeff; }
+.hero-proof .proof-unit-alt { display: none; }
+@media (max-width: 899px) {
+  .hero-proof strong { font-size: 30px; }
+  .hero-proof span.mono { font-size: 10.5px; }
+}
+@media (max-width: 899px) and (max-height: 780px) {
+  .hero-fold .hero-proof strong { font-size: clamp(22px,7vw,28px); letter-spacing: -.03em; }
+  .hero-fold .hero-proof span.mono { font-size: 10px; letter-spacing: .05em; }
+  /* One-row bar: "4" alone fits; the word moves to the label. */
+  .hero-proof .proof-unit { display: none; }
+  .hero-proof .proof-unit-alt { display: inline; }
+}
+
+/* ---------- Desktop hero: full-screen workshop photo behind a dark translucent layer ----------
+   The photo is fixed to the viewport (clip-path on the fold clips the fixed image), so the copy
+   and the next section scroll over it. The layer is even, slightly stronger on the left for the copy. */
+@media (min-width: 900px) {
+  .real-hero { position: relative; }
+  .hero-fold { position: relative; display: flex; flex-direction: column; min-height: 100vh; clip-path: inset(0); }
+  .hero-shell { position: static; display: flex; align-items: center; flex: 1 1 auto; width: 100%; max-width: none; margin: 0; padding-top: 0; padding-bottom: 0; }
+  .hero-workshop { position: absolute; inset: 0; z-index: 0; margin: 0; }
+  .hero-workshop picture { height: 100%; mask-image: none; }
+  .hero-workshop picture::after { display: none; }
+  .hero-workshop img { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; object-fit: cover; object-position: 65% 35%; }
+  .hero-workshop::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(12,12,12,.78) 0%, rgba(12,12,12,.6) 45%, rgba(12,12,12,.42) 100%); }
+  .hero-copy { position: relative; z-index: 1; max-width: 640px; padding: calc(var(--header-h, 69px) + 40px) 0 48px; }
+  .real-hero h1 { overflow-wrap: normal; }
+  .hero-proof { position: relative; z-index: 1; max-width: none; width: 100%; padding-left: max(40px, calc((100% - 1280px) / 2 + 40px)); padding-right: max(40px, calc((100% - 1280px) / 2 + 40px)); background: rgba(12,12,12,.72); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .hero-timing-note { position: relative; z-index: 1; margin: 0; padding-top: 12px; }
+}
+@media (min-width: 900px) and (prefers-reduced-motion: reduce) {
+  .hero-workshop img { position: absolute; top: 0; height: 100%; }
+}
+.hero-proof strong .proof-unit { font-size: inherit; line-height: inherit; color: inherit; letter-spacing: inherit; }
+
+/* Desktop header and hero small text: one step larger so section names read at a glance. */
+@media (min-width: 900px) {
+  .desktop .navlinks { gap: 24px; font-size: 12px; font-weight: 500; letter-spacing: .07em; }
+  .desktop .navlink { color: #c9cdd3; padding: 12px 2px; }
+  .hero-eyebrow { font-size: 12px; }
+  .hero-cash { font-size: 14px; }
+  .hero-proof span.mono { font-size: 12px; }
+}
+@media (min-width: 1200px) {
+  .desktop .navlinks { gap: 34px; font-size: 13.5px; }
+  .hero-eyebrow { font-size: 13px; }
+}
+
+/* Desktop header floats over the hero photo, transparent until the page scrolls. */
+@media (min-width: 900px) {
+  .site-header { position: fixed; top: 0; left: 0; right: 0; }
+  .site-header .s1 { position: static; background: transparent; border-bottom-color: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; transition: background .25s ease, border-color .25s ease; }
+  .site-header.is-scrolled .s1 { background: rgba(20, 20, 20, .82); border-bottom-color: rgba(255, 255, 255, .08); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+  .desktop .btn.s4 { min-height: 40px; height: 40px; padding: 0 18px; font-size: 13px; }
+}
+
+/* Reviews: source labels are plain text now (no links); rating block balances the big title. */
+.review-source { color: #9aa3b0 !important; text-decoration: none !important; }
+.reviews-count { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #b8c1ce; }
+@media (min-width: 900px) {
+  .desktop .s70 { align-items: flex-end; margin-bottom: 28px; }
+  .desktop .s71 { gap: 16px; padding-bottom: 10px; }
+  .desktop .s72 { font-size: 72px; line-height: 1; }
+  .desktop .s74 { color: #FBBC04; }
+  .desktop .s70 .reviews-pause { align-self: center; margin-left: auto; }
+  .reviews-pause { min-height: 36px; padding: 6px 14px; border-color: rgba(255,255,255,.3); color: #c9cdd3; }
+  .reviews-pause:hover { border-color: #fff; color: #fff; }
+}
+
+/* Specialist: Instagram link flows inside the sentence, with the Instagram glyph instead of @ and an arrow. */
+.specialist-section .ig-link { display: inline; padding: 12px 0; margin: -12px 0; white-space: nowrap; font-weight: 600; color: #78aeff; text-decoration: none; }
+.specialist-section .ig-link:hover { color: #fff; }
+.ig-icon { display: inline-block; vertical-align: -3px; margin: 0 4px 0 2px; }
+
+/* ---------- Accesorios ---------- */
+.acc-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.1); }
+.acc-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding: 28px 24px; background: var(--black); }
+.acc-ico { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; border: 1.5px solid var(--blue); border-radius: 14px; color: var(--blue); }
+.acc-ico svg { width: 26px; height: 26px; }
+.acc-tile b { font-size: 17px; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; color: #fff; }
+.acc-features { margin: 0; padding: 18px 24px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #c9cdd3; border: 1px solid rgba(255,255,255,.1); border-top: 0; }
+.acc-features .acc-feat { white-space: nowrap; }
+.acc-features .acc-dot { color: var(--blue); }
+@media (min-width: 900px) {
+  .desktop .s95 { align-items: stretch; }
+  .desktop .s96 { justify-content: center; }
+  .acc-panel { display: flex; flex-direction: column; justify-content: center; }
+  .desktop .acc-cta { align-self: flex-start; width: auto; margin-top: 8px; padding: 0 28px; }
+  .desktop .s97 { max-width: 480px; }
+}
+@media (max-width: 899px) {
+  .mobile .acc-grid { margin-top: 4px; }
+  .mobile .acc-tile { align-items: center; text-align: center; gap: 12px; padding: 20px 8px; }
+  .mobile .acc-ico { width: 48px; height: 48px; border-radius: 12px; }
+  .mobile .acc-ico svg { width: 24px; height: 24px; }
+  .mobile .acc-tile b { font-size: clamp(11px,3.4vw,14px); letter-spacing: .01em; }
+  .mobile .acc-features { padding: 14px 12px; font-size: 11px; line-height: 1.7; letter-spacing: .05em; text-align: center; }
+  .mobile .acc-cta { margin-top: 20px; }
+}
+@media (max-width: 899px) {
+  #accesorios .mobile .acc-tile b { overflow-wrap: normal; word-break: keep-all; font-size: clamp(10px,3vw,13px); letter-spacing: 0; }
+  .mobile .acc-tile { padding: 20px 4px; }
+}
+.acc-features .acc-dot { font-size: 1.1em; }
+.acc-tile b { overflow-wrap: normal; word-break: keep-all; }
+@media (min-width: 900px) { .acc-tile b { font-size: clamp(13px,1.15vw,17px); } .acc-tile { padding: 28px 20px; } }
+
+/* FAQ: "+" centred on the question and turning into "×" while the answer slides open. */
+.faq-list summary::after { content: "+"; top: 50%; line-height: 1; transform: translateY(-50%); transition: transform .25s cubic-bezier(.2,.7,.2,1); }
+.faq-list details[open] summary::after { content: "+"; }
+.faq-list details.is-open summary::after { transform: translateY(-50%) rotate(45deg); }
+.faq-list details > p { overflow: hidden; box-sizing: border-box; }
+@media (prefers-reduced-motion: reduce) { .faq-list summary::after { transition: none; } }
+@media (max-width: 899px) { .s189 .btn { display: flex; width: 100%; justify-content: center; } }
+
+/* ---------- Footer: brand, grouped contact / social / branches, then a quiet legal bar ---------- */
+.site-foot { display: block !important; color: #c9cdd3; }
+.foot-grid { display: grid; grid-template-columns: 1fr; gap: 32px; }
+.foot-brand .logo { width: 112px; height: 48px; }
+.foot-brand p { margin: 10px 0 0; font-size: 14px; color: #9aa3b0; }
+.foot-h { margin: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #78aeff; }
+.site-foot a { color: #fff; text-decoration: none; }
+.foot-row { display: flex; align-items: center; gap: 12px; min-height: 44px; font-size: 15px; }
+.foot-row svg { flex: 0 0 auto; color: #78aeff; }
+.foot-row span { display: flex; flex-direction: column; }
+.foot-row b { font-weight: 600; }
+.foot-row small { font-size: 12px; color: #9aa3b0; line-height: 1.4; }
+.foot-row:hover span, .foot-branches:hover { color: #78aeff; }
+.foot-branches { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; line-height: 1.5; }
+.foot-bottom { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 36px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.1); font-size: 12px; color: #8a929e; }
+.site-foot .foot-bottom a { display: inline-flex; align-items: center; min-height: 44px; color: #8a929e; text-decoration: underline; text-underline-offset: 3px; }
+.site-foot .foot-bottom a:hover { color: #fff; }
+@media (min-width: 900px) {
+  .foot-grid { grid-template-columns: 1.2fr 1fr 1.2fr 1fr; gap: 40px; }
+  .s114 { padding-bottom: 48px; }
+}
+@media (max-width: 899px) {
+  .s204.site-foot { padding-top: 48px; padding-bottom: 104px; }
+}
+.foot-branches { display: block; padding: 10px 0; }
+.foot-branches span { white-space: nowrap; }
+
+/* Branch map dialog: rises and fades in over a fading backdrop, and leaves the same way. */
+.branch-map[open] { animation: map-in .34s cubic-bezier(.2,.7,.2,1); }
+.branch-map[open]::backdrop { animation: map-backdrop-in .34s ease; }
+.branch-map.is-closing { animation: map-out .2s ease-in forwards; }
+.branch-map.is-closing::backdrop { animation: map-backdrop-out .2s ease-in forwards; }
+@keyframes map-in { from { opacity: 0; transform: translateY(18px) scale(.97); } }
+@keyframes map-out { to { opacity: 0; transform: translateY(10px) scale(.98); } }
+@keyframes map-backdrop-in { from { opacity: 0; } }
+@keyframes map-backdrop-out { to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .branch-map[open], .branch-map[open]::backdrop, .branch-map.is-closing, .branch-map.is-closing::backdrop { animation: none; }
+}
+
+/* Mobile branches: one full-width card at a time; the title and the name buttons follow the card in view. */
+@media (max-width: 899px) {
+  .mobile .branch-snap { gap: 16px; scroll-padding: 0 16px; margin-top: 14px; }
+  .mobile .branch-snap .bcard { flex: 0 0 100%; scroll-snap-align: center; }
+  .branch-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 20px; }
+  .branch-tab { min-height: 44px; padding: 0 10px; border: 1px solid rgba(20,20,20,.16); border-radius: 4px; background: #fff; color: var(--black); font: 600 14px "Montserrat", system-ui, sans-serif; cursor: pointer; transition: background .2s ease, color .2s ease, border-color .2s ease; }
+  .branch-tab[aria-pressed="true"] { background: var(--black); border-color: var(--black); color: #fff; }
+  .branch-title { display: inline-block; }
+  .branch-title.is-swapping { animation: branch-title-in .32s cubic-bezier(.2,.7,.2,1); }
+}
+@keyframes branch-title-in { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) { .branch-title.is-swapping { animation: none; } }
+/* Footer rhythm: every row has the same two-line shape and height, so headings, icons and text line up across groups. */
+.foot-col { display: flex; flex-direction: column; gap: 8px; }
+.foot-h { margin: 0 0 2px; line-height: 1; }
+.foot-row { min-height: 44px; padding: 0; gap: 14px; }
+.foot-row span { gap: 2px; }
+.foot-row b { font-size: 15px; line-height: 1.3; }
+.foot-row small { line-height: 1.3; }
+.foot-row svg { width: 22px; height: 22px; }
+.foot-branches { padding: 0; min-height: 44px; display: flex; flex-wrap: wrap; align-content: center; column-gap: 6px; line-height: 1.5; }
+.foot-branches { padding-top: 3px; }
+/* Footer rows: icon sits on the first (bold) line, not centred between the two lines. */
+.foot-row { align-items: flex-start; padding-top: 4px; }
+.foot-row svg { margin-top: -1px; }
+.foot-branches { padding-top: 4px; align-content: flex-start; }
+@media (max-width: 899px) { .branch-title { white-space: nowrap; font-size: clamp(26px, 8.6vw, 44px); } }
+
+/* Branch cards: "Cómo llegar" as a secondary outlined button with a pin, under the WhatsApp button. */
+.bcard .branch-directions { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; margin-top: 8px; padding: 0 16px; border: 1.5px solid var(--black); border-radius: 4px; font-size: 15px; font-weight: 700; color: var(--black); text-decoration: none; transition: background .2s ease, color .2s ease; }
+.bcard .branch-directions:hover { background: var(--black); color: #fff; }
+.bcard .branch-directions svg { flex: 0 0 auto; }

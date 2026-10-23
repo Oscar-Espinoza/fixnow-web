@@ -20,7 +20,7 @@ for(const [dir,site,staging]of [['dist','https://fixnow.com.ar',false],['dist-st
  assert.equal((index.match(/data-service-panel=/g)||[]).length,6);
  for(const node of graph['@graph'])assert.match(node.telephone,/^\+5411\d{8}$/);
  const organization=graph['@graph'].find(x=>x['@type']==='Organization');
- assert.equal(organization.email,'fixnow.ar@gmail.com');
+ assert.equal(organization.email,'info@fixnow.com.ar');
  assert.equal(organization.telephone,'+541156327284');
  const weekdays=['Monday','Tuesday','Wednesday','Thursday','Friday'];
  const spec=(dayOfWeek,opens,closes)=>({'@type':'OpeningHoursSpecification',dayOfWeek,opens,closes});
@@ -41,16 +41,23 @@ for(const [dir,site,staging]of [['dist','https://fixnow.com.ar',false],['dist-st
  assert.match(index,/<picture><source media="\(max-width: 899px\)"[^>]+hero-technician-mobile/);
  assert.match(index,/href="#diagnostico">Ver reparaciones/);
  assert.match(index,/data-repair-replay[^>]*>[^]*?Repetir animación<\/button>/);
- assert.match(index,/data-service-panel="0"[^]*?data-detail="time">30 min aprox\.</);
- assert.match(index,/data-service-panel="1"[^]*?data-detail="time">25 min aprox\.</);
- assert.ok(!index.includes('Desde 20 min')&&!index.includes('menos de una hora')&&!index.includes('menos de 1 hora'));
- assert.ok(!index.includes('href="#"')&&!index.includes('586 reseñas')&&!index.includes('>4,9<'));
+ assert.match(index,/data-service-panel="0"[^]*?data-detail="time">Desde 30 min</);
+ assert.match(index,/data-service-panel="1"[^]*?data-detail="time">Desde 20 min</);
+ assert.ok(!index.includes('menos de una hora')&&!index.includes('menos de 1 hora'));
+ assert.ok(!index.includes('href="#"')&&!index.includes('586 reseñas'));
  assert.match(index,/id="preguntas"/);
+ assert.ok(!index.includes('rating-value'));
+ assert.match(index,/class="disp reviews-title"/);
+ assert.match(index,/90 días de garantía por escrito/);
+ assert.match(index,/Los repuestos electrónicos que instalamos cuentan con 90 días de garantía por defectos de fabricación\. No cubre daños por golpes, roturas, líquidos o mal uso\./);
+ assert.match(index,/3 cuotas sin interés con Visa y Mastercard bancarias/);
+ assert.equal((index.match(/90 días por escrito<\/span>/g)||[]).length,4);
+
  assert.match(index,/class="hero-cash"><strong>20% de descuento<\/strong> pagando en efectivo/);
  assert.match(index,/id="specialist-title">Jhon, especialista de FixNow\.</);
  assert.equal((index.match(/class="branch-photo"/g)||[]).length,8);
  for(const slug of ['belgrano','villa-urquiza','villa-crespo','recoleta'])assert.ok(manifest['assets/branch-'+slug+'.webp']);
- assert.equal((index.match(/mailto:fixnow\.ar@gmail\.com/g)||[]).length,2);
+ assert.equal((index.match(/mailto:info@fixnow\.com\.ar/g)||[]).length,2);
  assert.equal((index.match(/https:\/\/maps\.app\.goo\.gl\/UuMmBuNvhXpXYEUr6/g)||[]).length,3);
  assert.equal((index.match(/WhatsApp 11 2842-0033/g)||[]).length,2);
  assert.ok(!index.includes('tel:+541128420033'));
