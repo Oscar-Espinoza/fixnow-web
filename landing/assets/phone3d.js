@@ -255,6 +255,9 @@ export async function mountPhone3D(visual,{onProgress,probe}={}){
   if(!isHero)addRepairParts();
   phone.traverse(o=>{if(o.isMesh)for(const m of Array.isArray(o.material)?o.material:[o.material]){m.userData.restOpacity=m.opacity;m.userData.restTransparent=m.transparent;}});
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  // Explicit service/replay clicks opt into one bounded playback, even with reduced motion.
+  // Initial load and resizing still show the static comparison for that preference.
+  let replayMotion=!isHero&&visual.dataset.playRequested==='true';
   const names=Object.keys(layers);
   let selected=Number(visual.dataset.selectedIssue??0),cameraSide=visual.dataset.cameraSide??'rear';
   let visible=false,frame=0,last=0,elapsed=0,clipTime=0,heroSpread=reduced.matches?1:0,dragging=false,dragX=0,dragY=0,dragYaw=0,dragPitch=0;
@@ -492,7 +495,7 @@ export async function mountPhone3D(visual,{onProgress,probe}={}){
     }
   }
   let selectionToken=0;
-  async function select(index,side='rear'){
+  async function select(index,side='rear',animate=false){
     if(visual.classList.contains('phone3d-failed'))return;
     const token=++selectionToken;
     stage.dataset.loading='true';visual.classList.add('phone3d-loading-next');
@@ -506,7 +509,7 @@ export async function mountPhone3D(visual,{onProgress,probe}={}){
       phone.traverse(o=>{if(o.isMesh)for(const m of Array.isArray(o.material)?o.material:[o.material])if(m.userData.restOpacity===undefined){m.userData.restOpacity=m.opacity;m.userData.restTransparent=m.transparent;}});
 
     // Screen/glass repairs restart at their before view so the sequence can replay.
-    selected=index;cameraSide=side;
+    selected=index;cameraSide=side;replayMotion=animate===true;
     startPose=[0,2,4].includes(index)?closedPose(index):currentPose;clipTime=0;dragYaw=0;dragPitch=0;
     stage.dataset.selectedPart=index===4&&cameraSide==='front'?'cameraFront':PARTS[index];requestDraw();
   
@@ -521,26 +524,27 @@ export async function mountPhone3D(visual,{onProgress,probe}={}){
   function draw(now=0){
     frame=0;if(!visible||document.hidden)return;
     const dt=last?Math.min((now-last)/1000,.05):0;last=now;elapsed+=dt;clipTime+=dt;
+    const reduceMotion=reduced.matches&&!replayMotion;
     let open=0,trayProgress=0,part=0,fitProgress=0,phase='closed';
     if(isHero){
       // Assembled for a beat, then it comes apart smoothly.
-      heroTime+=dt;heroSpread=reduced.matches?1:ramp(heroTime,HERO_HOLD,HERO_OPEN);
+      heroTime+=dt;heroSpread=reduceMotion?1:ramp(heroTime,HERO_HOLD,HERO_OPEN);
       currentPose=heroPose(heroSpread);phase=heroSpread>.98?'exploded':'opening';
       // Smooth closed body until the layers start to separate.
       const closedBody=heroSpread<.012;layers.chassis.userData.closedShell.visible=closedBody;layers.chassis.userData.volume.visible=!closedBody;
       phone.scale.setScalar(1);phone.position.y=-.06;
       phone.rotation.set(HERO_TILT,Math.PI+.16+HERO_YAW,-.5);
     }else{
-      const repair=repairPose(selected,reduced.matches?10:clipTime);
-      currentPose=reduced.matches?repair.pose:blend(startPose,repair.pose,smooth(clipTime/.32));
+      const repair=repairPose(selected,reduceMotion?10:clipTime);
+      currentPose=reduceMotion?repair.pose:blend(startPose,repair.pose,smooth(clipTime/.32));
       open=repair.open;trayProgress=repair.tray;part=repair.part;fitProgress=repair.fit;phase=repair.phase;
-      if(reduced.matches&&selected===0){
+      if(reduceMotion&&selected===0){
         Object.assign(currentPose.brokenScreen,{x:1.0,y:0,z:-.22,ry:0,rz:0,alpha:1,scale:.62,thickness:3});
         Object.assign(currentPose.display,{x:-1.0,y:0,z:-.22,ry:0,rz:0,alpha:1,scale:.62,thickness:3});phase='comparison';
         // Comparison shows only the damaged and clean screens; hide interior-only parts that the screen replacement keeps seated.
         for(const name of Object.keys(currentPose))if(!['brokenScreen','display'].includes(name))currentPose[name].alpha=0;
       }
-      if(reduced.matches&&selected===2){
+      if(reduceMotion&&selected===2){
         for(const name of Object.keys(currentPose))currentPose[name].alpha=0;
         Object.assign(currentPose.backBroken,{x:-1.3,y:.5,z:PANE_Z,rx:0,ry:0,rz:0,alpha:1,scale:.8,thickness:1});
         Object.assign(currentPose.backNew,{x:1.3,y:.5,z:PANE_Z,rx:0,ry:0,rz:0,alpha:1,scale:.8,thickness:1});phase='comparison';
@@ -550,12 +554,12 @@ export async function mountPhone3D(visual,{onProgress,probe}={}){
       const targetRoll=selected===3?-Math.PI/2:rearView?.012:-.012;
       const targetScale=[0,2].includes(selected)?1:selected===3?.82:.9;
       const targetField=selected===3?3.45:selected===4?3.4:3.8;
-      if(!dragging)viewYaw=repair.yaw!==undefined?repair.yaw:reduced.matches?targetYaw:THREE.MathUtils.damp(viewYaw,targetYaw,7,dt);
-      viewRoll=reduced.matches?targetRoll:THREE.MathUtils.damp(viewRoll,targetRoll,6,dt);
-      viewScale=reduced.matches?targetScale:THREE.MathUtils.damp(viewScale,targetScale,6,dt);
-      viewField=reduced.matches?targetField:THREE.MathUtils.damp(viewField,targetField,6,dt);
+      if(!dragging)viewYaw=repair.yaw!==undefined?repair.yaw:reduceMotion?targetYaw:THREE.MathUtils.damp(viewYaw,targetYaw,7,dt);
+      viewRoll=reduceMotion?targetRoll:THREE.MathUtils.damp(viewRoll,targetRoll,6,dt);
+      viewScale=reduceMotion?targetScale:THREE.MathUtils.damp(viewScale,targetScale,6,dt);
+      viewField=reduceMotion?targetField:THREE.MathUtils.damp(viewField,targetField,6,dt);
       phone.scale.setScalar(viewScale);phone.position.y=0;
-      phone.rotation.set((selected===3?-.16:-.065)+dragPitch,viewYaw+dragYaw+(reduced.matches||dragging?0:Math.sin(elapsed*.7)*.035),viewRoll);
+      phone.rotation.set((selected===3?-.16:-.065)+dragPitch,viewYaw+dragYaw+(reduceMotion||dragging?0:Math.sin(elapsed*.7)*.035),viewRoll);
       setView(viewField);
     }
     applyPose(currentPose);
@@ -573,7 +577,8 @@ export async function mountPhone3D(visual,{onProgress,probe}={}){
       stage.dataset.cameraAttached='true';stage.dataset.detachedParts='display,tray,board,backGlass';
     }
     renderer.render(scene,camera);stage.dataset.renderCount=String(Number(stage.dataset.renderCount||0)+1);
-    if(!reduced.matches&&(!isHero||heroSpread<1))frame=requestAnimationFrame(draw);
+    if(reduced.matches&&replayMotion&&clipTime>=(selected===4&&cameraSide==='rear'?10.5:4.3))replayMotion=false;
+    if(!reduceMotion&&(!isHero||heroSpread<1))frame=requestAnimationFrame(draw);
   }
   function requestDraw(){if(visible&&!frame)frame=requestAnimationFrame(draw);}
   function setView(v){
@@ -588,8 +593,8 @@ export async function mountPhone3D(visual,{onProgress,probe}={}){
   new ResizeObserver(resize).observe(stage);
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){last=0;requestDraw();}else{cancelAnimationFrame(frame);frame=0;}},{threshold:.05}).observe(stage);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else{last=0;requestDraw();}});
-  reduced.addEventListener('change',()=>{requestDraw();});
-  if(!isHero)visual.addEventListener('phone-selection',e=>select(e.detail.index,e.detail.cameraSide));
+  reduced.addEventListener('change',()=>{replayMotion=false;requestDraw();});
+  if(!isHero)visual.addEventListener('phone-selection',e=>select(e.detail.index,e.detail.cameraSide,e.detail.animate));
   // The hero is a fixed illustration: no drag-to-rotate.
   if(isHero){canvas.style.touchAction='auto';canvas.style.cursor='default';}
   if(!isHero)canvas.addEventListener('pointerdown',e=>{dragging=true;dragX=e.clientX;dragY=e.clientY;canvas.setPointerCapture(e.pointerId);});

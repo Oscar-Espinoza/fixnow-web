@@ -1,6 +1,6 @@
 /* Source artboard interactions, translated to native DOM controls. */
 'use strict';
-const diagnosticData = {"desktop": [{"num": "01", "title": "Pantalla", "symptom": "Vidrio roto, manchas o sin imagen.", "time": "Desde 30 min", "zone": {"top": "4px", "left": "4px", "w": "158px", "h": "328px", "r": "26px"}}, {"num": "02", "title": "Batería", "symptom": "Se descarga rápido o no carga.", "time": "Desde 20 min", "zone": {"top": "110px", "left": "30px", "w": "106px", "h": "170px", "r": "12px"}}, {"num": "03", "title": "Vidrio trasero", "symptom": "Roto o con fisuras.", "time": "Entre 1 y 3 h según el modelo", "zone": {"top": "-8px", "left": "-8px", "w": "182px", "h": "352px", "r": "36px"}}, {"num": "04", "title": "Carga", "symptom": "No carga, carga lento o se corta.", "time": "Consultá por WhatsApp", "zone": {"top": "300px", "left": "55px", "w": "56px", "h": "38px", "r": "10px"}}, {"num": "05", "title": "Cámara", "symptom": "Fotos borrosas o no funciona.", "time": "Consultá por WhatsApp", "zone": {"top": "14px", "left": "14px", "w": "70px", "h": "70px", "r": "18px"}}, {"num": "06", "title": "Equipo mojado", "symptom": "No enciende o presenta fallas. Apagalo y traelo cuanto antes.", "time": "Consultá por WhatsApp", "zone": {"top": "60px", "left": "20px", "w": "126px", "h": "250px", "r": "50%"}}], "mobile": [{"num": "01", "title": "Pantalla", "symptom": "Vidrio roto, manchas o sin imagen.", "time": "Desde 30 min", "zone": {"top": "3px", "left": "3px", "w": "120px", "h": "250px", "r": "20px"}}, {"num": "02", "title": "Batería", "symptom": "Se descarga rápido o no carga.", "time": "Desde 20 min", "zone": {"top": "84px", "left": "23px", "w": "80px", "h": "130px", "r": "9px"}}, {"num": "03", "title": "Vidrio trasero", "symptom": "Roto o con fisuras.", "time": "Entre 1 y 3 h según el modelo", "zone": {"top": "-7px", "left": "-7px", "w": "140px", "h": "270px", "r": "28px"}}, {"num": "04", "title": "Carga", "symptom": "No carga, carga lento o se corta.", "time": "Consultá por WhatsApp", "zone": {"top": "228px", "left": "42px", "w": "42px", "h": "30px", "r": "8px"}}, {"num": "05", "title": "Cámara", "symptom": "Fotos borrosas o no funciona.", "time": "Consultá por WhatsApp", "zone": {"top": "10px", "left": "10px", "w": "54px", "h": "54px", "r": "14px"}}, {"num": "06", "title": "Equipo mojado", "symptom": "No enciende o presenta fallas. Apagalo y traelo cuanto antes.", "time": "Lo antes posible", "zone": {"top": "46px", "left": "15px", "w": "96px", "h": "190px", "r": "50%"}}]};
+const diagnosticData = {"desktop": [{"num": "01", "title": "Pantalla", "symptom": "Vidrio roto, manchas o sin imagen.", "time": "30 min aprox.", "zone": {"top": "4px", "left": "4px", "w": "158px", "h": "328px", "r": "26px"}}, {"num": "02", "title": "Batería", "symptom": "Se descarga rápido o no carga.", "time": "25 min aprox.", "zone": {"top": "110px", "left": "30px", "w": "106px", "h": "170px", "r": "12px"}}, {"num": "03", "title": "Vidrio trasero", "symptom": "Roto o con fisuras.", "time": "Entre 1 y 3 h según el modelo", "zone": {"top": "-8px", "left": "-8px", "w": "182px", "h": "352px", "r": "36px"}}, {"num": "04", "title": "Carga", "symptom": "No carga, carga lento o se corta.", "time": "Consultá por WhatsApp", "zone": {"top": "300px", "left": "55px", "w": "56px", "h": "38px", "r": "10px"}}, {"num": "05", "title": "Cámara", "symptom": "Fotos borrosas o no funciona.", "time": "Consultá por WhatsApp", "zone": {"top": "14px", "left": "14px", "w": "70px", "h": "70px", "r": "18px"}}, {"num": "06", "title": "Equipo mojado", "symptom": "No enciende o presenta fallas. Apagalo y traelo cuanto antes.", "time": "Consultá por WhatsApp", "zone": {"top": "60px", "left": "20px", "w": "126px", "h": "250px", "r": "50%"}}], "mobile": [{"num": "01", "title": "Pantalla", "symptom": "Vidrio roto, manchas o sin imagen.", "time": "30 min aprox.", "zone": {"top": "3px", "left": "3px", "w": "120px", "h": "250px", "r": "20px"}}, {"num": "02", "title": "Batería", "symptom": "Se descarga rápido o no carga.", "time": "25 min aprox.", "zone": {"top": "84px", "left": "23px", "w": "80px", "h": "130px", "r": "9px"}}, {"num": "03", "title": "Vidrio trasero", "symptom": "Roto o con fisuras.", "time": "Entre 1 y 3 h según el modelo", "zone": {"top": "-7px", "left": "-7px", "w": "140px", "h": "270px", "r": "28px"}}, {"num": "04", "title": "Carga", "symptom": "No carga, carga lento o se corta.", "time": "Consultá por WhatsApp", "zone": {"top": "228px", "left": "42px", "w": "42px", "h": "30px", "r": "8px"}}, {"num": "05", "title": "Cámara", "symptom": "Fotos borrosas o no funciona.", "time": "Consultá por WhatsApp", "zone": {"top": "10px", "left": "10px", "w": "54px", "h": "54px", "r": "14px"}}, {"num": "06", "title": "Equipo mojado", "symptom": "No enciende o presenta fallas. Apagalo y traelo cuanto antes.", "time": "Lo antes posible", "zone": {"top": "46px", "left": "15px", "w": "96px", "h": "190px", "r": "50%"}}]};
 // Main WhatsApp (Belgrano). Repair buttons add the selected service to the message.
 const whatsappLink = text => 'https://wa.me/5491156327284?text=' + encodeURIComponent(text);
 function syncConsultLinks(service) {
@@ -8,7 +8,7 @@ function syncConsultLinks(service) {
 }
 let selectedIssue = 0;
 let selectedCamera = 'rear';
-function selectIssue(index) {
+function selectIssue(index, options = {}) {
   selectedIssue = index;
   const root = document.getElementById('diagnostico');
   const variant = window.matchMedia('(min-width: 900px)').matches ? 'desktop' : 'mobile';
@@ -30,7 +30,7 @@ function selectIssue(index) {
   const panel = root.querySelector(`[data-service-panel="${index}"]`);
   panel.querySelectorAll('[data-detail]').forEach(field => { field.textContent = issue[field.dataset.detail]; });
   syncConsultLinks(issue.title);
-  updateExplodedPhone(root, index, issue.title);
+  updateExplodedPhone(root, index, issue.title, options);
   syncRepairReplay();
   scheduleWhatsAppPosition();
 }
@@ -44,12 +44,12 @@ function syncRepairReplay() {
 }
 syncConsultLinks(diagnosticData.mobile[0].title);
 document.querySelectorAll('[data-issue]').forEach(button => {
-  button.addEventListener('click', () => selectIssue(Number(button.dataset.issue)));
+  button.addEventListener('click', () => selectIssue(Number(button.dataset.issue), {animate: true}));
 });
 document.querySelectorAll('[data-camera-view]').forEach(button => {
-  button.addEventListener('click', () => { selectedCamera = button.dataset.cameraView; selectIssue(4); });
+  button.addEventListener('click', () => { selectedCamera = button.dataset.cameraView; selectIssue(4, {animate: true}); });
 });
-document.querySelector('[data-repair-replay]').addEventListener('click', () => selectIssue(selectedIssue));
+document.querySelector('[data-repair-replay]').addEventListener('click', () => selectIssue(selectedIssue, {animate: true}));
 const menu = document.getElementById('mobile-menu');
 const opener = document.querySelector('[data-menu-open]');
 const closer = document.querySelector('[data-menu-close]');
@@ -98,7 +98,7 @@ window.matchMedia('(min-width: 900px)').addEventListener('change', event => { if
 
 // Original conceptual phone layers share the diagnostic buttons as their only controls.
 const selectedLayers = [['glass', 'screen'], ['battery'], ['back'], ['board'], ['back'], ['glass', 'screen', 'battery', 'board', 'back']];
-function updateExplodedPhone(root, index, title) {
+function updateExplodedPhone(root, index, title, options = {}) {
   const visual = root.querySelector('.phone-exploded');
   const opens = ![0, 2, 4].includes(index);
   visual.classList.toggle('is-revealed', opens);
@@ -118,7 +118,8 @@ function updateExplodedPhone(root, index, title) {
   image.decode().then(() => { if (visual._posterToken === token) poster.src = nextPoster; }).catch(() => {});
   visual.dataset.selectedIssue = String(index);
   visual.dataset.cameraSide = selectedCamera;
-  visual.dispatchEvent(new CustomEvent('phone-selection', {detail: {index, cameraSide: selectedCamera}}));
+  visual.dataset.playRequested = String(options.animate === true);
+  visual.dispatchEvent(new CustomEvent('phone-selection', {detail: {index, cameraSide: selectedCamera, animate: options.animate === true}}));
 }
 const phoneVisuals = document.querySelectorAll('.phone-exploded');
 if ('IntersectionObserver' in window) {
@@ -191,9 +192,9 @@ if (document.fonts) document.fonts.ready.then(scheduleWhatsAppPosition);
 scheduleWhatsAppPosition();
 
 
-// The hero and diagnostic card share assets, but have separate animation roles.
+// The real-photo hero needs no WebGL. Only the service illustration loads a 3D scene.
 let phone3DModule;
-const sceneHosts = document.querySelectorAll('.hero-phone, #diagnostico .phone-exploded');
+const sceneHosts = document.querySelectorAll('#diagnostico .phone-exploded');
 const phone3DHosts = new WeakSet();
 let phoneScenesStarted = false;
 let nearObserver;
@@ -205,8 +206,8 @@ function webGL2Available() {
     return {canvas, gl};
   } catch { return false; }
 }
-let firstWebGLProbe = webGL2Available();
-const canUseWebGL2 = Boolean(firstWebGLProbe);
+let firstWebGLProbe;
+let canUseWebGL2;
 function offer3D(visual) {
   if (visual._optInButton) return;
   const button = document.createElement('button');
@@ -232,8 +233,10 @@ function showPhoneLoading(visual) {
 }
 async function loadPhoneScene(visual, optedIn = false) {
   if (!visual.clientWidth || !visual.clientHeight || phone3DHosts.has(visual)) return;
-  if (!phoneScenesStarted || !canUseWebGL2) { if (!canUseWebGL2) visual.classList.add('phone3d-failed'); return; }
+  if (!phoneScenesStarted) return;
   if (navigator.connection?.saveData && !optedIn) { offer3D(visual); return; }
+  if (canUseWebGL2 === undefined) { firstWebGLProbe = webGL2Available(); canUseWebGL2 = Boolean(firstWebGLProbe); }
+  if (!canUseWebGL2) { visual.classList.add('phone3d-failed'); return; }
   phone3DHosts.add(visual);
   nearObserver?.unobserve(visual);
   try {
@@ -262,7 +265,7 @@ function startPhoneScenes() {
   if ('IntersectionObserver' in window) {
     nearObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => { if (entry.isIntersecting) loadPhoneScene(entry.target); });
-    }, {rootMargin: '0px'});
+    }, {rootMargin: '0px', threshold: 0.15});
     sceneHosts.forEach(host => nearObserver.observe(host));
   } else { sceneHosts.forEach(host => loadPhoneScene(host)); }
 }

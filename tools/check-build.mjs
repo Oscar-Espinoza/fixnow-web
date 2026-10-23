@@ -35,6 +35,19 @@ for(const [dir,site,staging]of [['dist','https://fixnow.com.ar',false],['dist-st
   assert.deepEqual(branch.openingHoursSpecification,schedule,name+' schedule');
   assert.ok(!branch.address.postalCode);
  }
+ assert.equal((index.match(/<h1\b/g)||[]).length,1);
+ assert.ok(!index.includes('data-phone-scene="hero"')&&!index.includes('hero-phone'));
+ assert.ok(manifest['assets/hero-technician-desktop.webp']&&manifest['assets/hero-technician-mobile.webp']);
+ assert.match(index,/<picture><source media="\(max-width: 899px\)"[^>]+hero-technician-mobile/);
+ assert.match(index,/href="#diagnostico">Ver reparaciones/);
+ assert.match(index,/data-repair-replay[^>]*>[^]*?Repetir animación<\/button>/);
+ assert.match(index,/data-service-panel="0"[^]*?data-detail="time">30 min aprox\.</);
+ assert.match(index,/data-service-panel="1"[^]*?data-detail="time">25 min aprox\.</);
+ assert.ok(!index.includes('Desde 20 min')&&!index.includes('menos de una hora')&&!index.includes('menos de 1 hora'));
+ assert.ok(!index.includes('href="#"')&&!index.includes('586 reseñas')&&!index.includes('>4,9<'));
+ assert.match(index,/id="preguntas"/);
+ assert.match(index,/class="hero-cash"><strong>20% de descuento<\/strong> pagando en efectivo/);
+ assert.match(index,/id="specialist-title">Jhon, especialista de FixNow\.</);
  assert.equal((index.match(/class="branch-photo"/g)||[]).length,8);
  for(const slug of ['belgrano','villa-urquiza','villa-crespo','recoleta'])assert.ok(manifest['assets/branch-'+slug+'.webp']);
  assert.equal((index.match(/mailto:fixnow\.ar@gmail\.com/g)||[]).length,2);
