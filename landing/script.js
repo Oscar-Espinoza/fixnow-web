@@ -180,7 +180,7 @@ if ('IntersectionObserver' in window) {
   phoneVisuals.forEach(visual => { if (![0, 2].includes(Number(visual.dataset.fallbackIssue ?? 0))) visual.classList.add('is-revealed'); });
 }
 
-// The hero has its own WhatsApp button; after it scrolls away the floating one stays on screen.
+// The hero has its own WhatsApp button; the floating one shows everywhere else.
 const whatsappFloat = document.querySelector('.whatsapp-float');
 const inlineWhatsApp = document.querySelectorAll('.real-hero .hero-cta-primary');
 if (whatsappFloat && inlineWhatsApp.length && 'IntersectionObserver' in window) {
@@ -360,35 +360,53 @@ if (branchSnap) {
     if (lockTo !== null) { if (i === lockTo) lockTo = null; return; }
     show(i);
   };
-  let snapRestore = 0;
+  // Page position after a tap: the full title stays visible and "Cómo llegar" is on screen. It is measured
+  // against the tallest card so every branch lands in exactly the same place.
+  const settleY = () => {
+    const section = branchSnap.closest('.mobile');
+    const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height || 0;
+    const labelY = scrollY + section.querySelector('.mono').getBoundingClientRect().top - headerHeight - 18;
+    const titleLimit = scrollY + section.querySelector('h2').getBoundingClientRect().top - headerHeight - 6;
+    const lowest = Math.max(...cards.map(card => (card.querySelector('.branch-directions') || card).getBoundingClientRect().bottom));
+    const directionsY = scrollY + lowest - innerHeight + 12;
+    // When the whole section fits one screen, line it up under the header so nothing of the next section shows.
+    const box = section.getBoundingClientRect();
+    if (box.height <= innerHeight - headerHeight + 1) return Math.max(0, scrollY + box.top - headerHeight);
+    // Otherwise never scroll past the end of the section.
+    const sectionEndY = scrollY + box.bottom - innerHeight;
+    return Math.max(0, Math.min(sectionEndY, titleLimit, Math.max(labelY, directionsY)));
+  };
+  // One eased animation moves the page and the card together (two native smooth scrolls cannot run at once).
+  let tween = 0;
   tabs.forEach((tab, n) => tab.addEventListener('click', () => {
-    const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
     lockTo = n;
     clearTimeout(lockTimer);
-    lockTimer = setTimeout(() => { lockTo = null; sync(); }, 2500);
+    lockTimer = setTimeout(() => { lockTo = null; sync(); }, 1500);
     show(n);
-    if (current() === n) lockTo = null;
-    const slide = () => branchSnap.scrollTo({left: cards[n].offsetLeft - cards[0].offsetLeft, behavior});
-    // The whole card must be visible (down to "Cómo llegar"); the section label may go under the header.
-    const label = branchSnap.closest('.mobile').querySelector('.mono');
-    const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height || 0;
-    const labelTarget = scrollY + label.getBoundingClientRect().top - headerHeight - 18;
-    const cardTarget = scrollY + cards[n].getBoundingClientRect().bottom - innerHeight + 16;
-    const target = Math.max(0, labelTarget, cardTarget);
-    if (Math.abs(target - scrollY) < 4) { slide(); return; }
-    // Browsers run one smooth scroll at a time: settle the page first, then slide to the card.
-    // The page's vertical scroll snap would pull this back to the section start, so pause it meanwhile.
-    document.documentElement.style.scrollSnapType = 'none';
-    clearTimeout(snapRestore);
-    let slid = false;
-    const thenSlide = () => { if (slid) return; slid = true; window.removeEventListener('scrollend', thenSlide); slide(); snapRestore = setTimeout(() => { document.documentElement.style.scrollSnapType = ''; }, 900); };
-    window.addEventListener('scrollend', thenSlide);
-    setTimeout(thenSlide, behavior === 'smooth' ? 700 : 0);
-    window.scrollTo({top: target, behavior});
+    const fromX = branchSnap.scrollLeft, toX = cards[n].offsetLeft - cards[0].offsetLeft;
+    const fromY = scrollY, toY = Math.abs(settleY() - scrollY) < 4 ? scrollY : settleY();
+    cancelAnimationFrame(tween);
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { branchSnap.scrollLeft = toX; window.scrollTo(0, toY); lockTo = null; return; }
+    const root = document.documentElement;
+    root.style.scrollSnapType = 'none'; root.style.scrollBehavior = 'auto';
+    branchSnap.style.scrollSnapType = 'none'; branchSnap.style.scrollBehavior = 'auto';
+    const duration = 520, start = performance.now();
+    const ease = t => 1 - Math.pow(1 - t, 3);
+    const step = now => {
+      const t = Math.min(1, (now - start) / duration), e = ease(t);
+      branchSnap.scrollLeft = fromX + (toX - fromX) * e;
+      window.scrollTo(0, fromY + (toY - fromY) * e);
+      if (t < 1) { tween = requestAnimationFrame(step); return; }
+      branchSnap.style.scrollSnapType = ''; branchSnap.style.scrollBehavior = '';
+      root.style.scrollSnapType = ''; root.style.scrollBehavior = '';
+      lockTo = null; sync();
+    };
+    tween = requestAnimationFrame(step);
   }));
   branchSnap.addEventListener('scroll', sync, {passive: true});
   sync();
 }
+
 
 // "Ver todas en el mapa": overview of the four branches in a modal dialog.
 const branchMap = document.getElementById('branch-map');

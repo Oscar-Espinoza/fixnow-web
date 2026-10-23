@@ -2623,20 +2623,6 @@ img {
     padding-bottom: 104px;
   }
 }
-@media (max-width: 899px) {
-  html {
-    scroll-snap-type: y proximity;
-  }
-  main > section,
-  footer {
-    scroll-snap-align: start;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-snap-type: none;
-  }
-}
 #top > .desktop,
 #top > .mobile {
   background-color: var(--black);
@@ -3581,3 +3567,91 @@ footer a.footer-legal:hover {
 .bcard .branch-directions { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; margin-top: 8px; padding: 0 16px; border: 1.5px solid var(--black); border-radius: 4px; font-size: 15px; font-weight: 700; color: var(--black); text-decoration: none; transition: background .2s ease, color .2s ease; }
 .bcard .branch-directions:hover { background: var(--black); color: #fff; }
 .bcard .branch-directions svg { flex: 0 0 auto; }
+
+/* Mobile branch cards, compacted so the title, the names and the card's "Cómo llegar" fit one screen after a tap. */
+@media (max-width: 899px) {
+  #sucursales .mobile .branch-photo { aspect-ratio: 2 / 1; }
+  #sucursales .mobile .bmap { height: 104px; }
+  #sucursales .mobile .s185 { padding: 14px 16px 16px; gap: 3px; }
+  #sucursales .mobile .bcard .branch-wa { min-height: 46px; margin-top: 10px; }
+  #sucursales .mobile .bcard .branch-directions { min-height: 44px; margin-top: 8px; }
+  .branch-tabs { gap: 6px; margin-top: 16px; }
+  .branch-tab { min-height: 40px; }
+  .mobile .branch-snap { margin-top: 12px; }
+}
+/* Mobile branch cards drop the small street map: the photo, "Cómo llegar" and the overview map cover it. */
+@media (max-width: 899px) { #sucursales .mobile .bcard .bmap { display: none; } }
+/* Short phones (iPhone SE class): a slightly shorter photo so "Cómo llegar" sits fully on screen after a tap. */
+@media (max-width: 899px) and (max-height: 720px) {
+  #sucursales .mobile .branch-photo { aspect-ratio: 2.5 / 1; }
+}
+
+/* Sucursales on phones fills exactly one screen under the header, content centred, so a tap shows only this section. */
+@media (max-width: 899px) {
+  #sucursales > .mobile.sec { min-height: calc(100svh - var(--header-h, 61px)); display: flex; flex-direction: column; justify-content: center; padding-top: 20px; padding-bottom: 20px; box-sizing: border-box; }
+}
+
+/* Phones: these sections each fill one screen under the header, content centred. The closing
+   "Escribinos" block and the footer share one screen together. */
+@media (max-width: 899px) {
+  #proceso > .mobile.sec { min-height: calc(100svh - var(--header-h, 61px)); display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; padding-top: 32px; padding-bottom: 32px; }
+  #contacto > .mobile { min-height: calc(100svh - var(--header-h, 61px)); display: flex; flex-direction: column; }
+  #contacto > .mobile .s200 { padding-top: 40px; padding-bottom: 40px; }
+  #contacto > .mobile .s204.site-foot { flex: 1 0 auto; display: flex !important; flex-direction: column; justify-content: space-between; padding-top: 32px; padding-bottom: 84px; }
+  #contacto > .mobile .foot-grid { gap: 22px; }
+  #contacto > .mobile .foot-bottom { margin-top: 22px; }
+}
+/* Phone footer compact enough to share one screen with "Escribinos": Contacto and Seguinos side by side. */
+@media (max-width: 899px) {
+  #contacto > .mobile .s200 { padding-top: 32px; padding-bottom: 32px; }
+  #contacto > .mobile .s204.site-foot { padding-top: 28px; padding-bottom: 80px; }
+  #contacto > .mobile .foot-grid { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 20px 14px; }
+  #contacto > .mobile .foot-brand, #contacto > .mobile .foot-col:last-child { grid-column: 1 / -1; }
+  #contacto > .mobile .foot-brand { display: flex; align-items: center; gap: 14px; }
+  #contacto > .mobile .foot-brand p { margin: 0; font-size: 13px; line-height: 1.4; }
+  #contacto > .mobile .foot-row { gap: 10px; }
+  #contacto > .mobile .foot-row svg { width: 20px; height: 20px; }
+  #contacto > .mobile .foot-row b { font-size: clamp(12.5px, 3.6vw, 15px); overflow-wrap: anywhere; }
+  #contacto > .mobile .foot-row small { font-size: 11px; }
+  #contacto > .mobile .foot-bottom { margin-top: 16px; padding-top: 6px; }
+}
+@media (max-width: 899px) {
+  #contacto > .mobile .foot-grid { grid-template-columns: minmax(0,1.25fr) minmax(0,1fr); }
+  #contacto > .mobile .foot-row b { overflow-wrap: normal; white-space: nowrap; font-size: clamp(12px, 3.45vw, 15px); }
+}
+@media (max-width: 340px) { #contacto > .mobile .foot-grid { grid-template-columns: minmax(0,1fr); } }
+
+/* ---------- Closing block: a taller, useful CTA; the footer below keeps its natural compact height ---------- */
+@media (max-width: 899px) {
+  #contacto > .mobile { min-height: 0; display: block; }
+  #contacto > .mobile .s200 { min-height: clamp(460px, 62svh, 560px); display: flex; flex-direction: column; justify-content: center; padding-top: 48px; padding-bottom: 40px; box-sizing: border-box; }
+  #contacto > .mobile .s200 .s202 { font-size: 17px; }
+  #contacto > .mobile .s204.site-foot { flex: none; display: block !important; padding-top: 32px; padding-bottom: 28px; }
+  #contacto > .mobile .foot-row small { display: none; }
+  #contacto > .mobile .foot-row { min-height: 40px; align-items: center; padding-top: 0; }
+  #contacto > .mobile .foot-row svg { margin-top: 0; }
+  #contacto > .mobile .foot-col:last-child { display: none; }
+  #contacto > .mobile .foot-bottom { margin-top: 20px; padding-top: 8px; }
+}
+@media (max-width: 899px) and (max-height: 700px) {
+  #contacto > .mobile .s200 { min-height: 0; padding-top: 40px; padding-bottom: 36px; }
+  #contacto > .mobile .s201 { font-size: 44px !important; }
+}
+@media (max-width: 899px) {
+  #contacto > .mobile .s200 { min-height: clamp(420px, 56svh, 520px); }
+  #contacto > .mobile .foot-col { gap: 2px; }
+}
+@media (max-width: 899px) and (max-height: 700px) { #contacto > .mobile .s200 { min-height: 0; } }
+/* When the closing block + footer are shorter than the screen, the blue block absorbs the rest (never the dark footer). */
+@media (max-width: 899px) {
+  #contacto > .mobile { min-height: calc(100svh - var(--header-h, 61px)); display: flex; flex-direction: column; }
+  #contacto > .mobile .s200 { flex: 1 0 auto; }
+}
+
+@media (max-width: 899px) { #contacto > .mobile .s204.site-foot { padding-bottom: 88px; } }
+
+/* Closing "Escribinos": the simple version (headline, one line, one WhatsApp button) at its natural height. */
+@media (max-width: 899px) {
+  #contacto > .mobile { min-height: 0; display: block; }
+  #contacto > .mobile .s200 { min-height: 0; display: block; flex: none; padding-top: 56px; padding-bottom: 56px; }
+}
