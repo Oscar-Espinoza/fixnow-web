@@ -4210,3 +4210,22 @@ body:has(.photo-lightbox[open]) .whatsapp-float { display: none; }
   #sucursales .desktop .bcard .bcard-mapchip svg { width: 16px; height: 16px; }
   #accesorios .desktop .acc-tile b { font-size: clamp(11px, 1.2vw, 15px) !important; letter-spacing: 0; overflow-wrap: normal; word-break: keep-all; hyphens: none; }
 }
+
+/* Review pass: closing block + footer fit at ~600px tall, FAQ clear of the floating button,
+   tap targets back to 40px+, tidier accessories line. */
+@media (min-width: 900px) and (max-height: 600px) {
+  #contacto .s108 { padding-top: 12px !important; padding-bottom: 12px !important; }
+  #contacto .desktop .s110 { font-size: clamp(40px, min(7.6vw, 12vh), 116px) !important; }
+  .s114 { padding-top: 16px !important; padding-bottom: 16px !important; }
+  .site-foot { gap: 14px; }
+  .foot-bottom { margin-top: 10px; }
+  #preguntas .wrap { padding-right: 72px; }
+  #sucursales .desktop .bcard .bcard-mapchip { width: 40px !important; height: 40px; }
+  .diagnostic-detail .repair-replay { min-height: 40px; }
+  #sucursales .desktop .bcard .branch-actions a { min-height: 40px !important; }
+  #accesorios .desktop .acc-features { letter-spacing: .06em; font-size: 10.5px; }
+}
+.reviews-pause { min-height: 40px; }
+@media (min-width: 900px) and (max-height: 940px) {
+  .diagnostic-section { padding-bottom: clamp(14px, 3vh, 80px) !important; }
+}
