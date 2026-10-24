@@ -444,8 +444,6 @@ img {
 .desktop .in3 {
   animation: desktop-rise .8s .2s cubic-bezier(.2, .7, .2, 1) both;
 }
-@media (prefers-reduced-motion: reduce) {
-}
 .desktop .navlinks {
   display: flex;
   gap: 28px;
@@ -1271,8 +1269,6 @@ img {
 }
 .mobile .swap {
   animation: mobile-slidein .4s ease both;
-}
-@media (prefers-reduced-motion: reduce) {
 }
 .s116 {
   position: sticky;
@@ -3856,10 +3852,10 @@ h3, .s63, .s172 { text-wrap: balance; }
 blockquote, .s78, .s180 { text-wrap: pretty; }
 /* B1: "¿Qué necesitás reparar?" follows the same height-aware title scale; floor stays at 46px. */
 @media (min-width: 900px) {
-  .desktop .h2, .faq-section h2, #accesorios .desktop .h2, .desktop .reviews-title, .diagnostic-intro h2 { font-size: clamp(46px, min(5.8vw, 9.2vh), 84px) !important; }
+  .desktop .h2, .faq-section h2, #accesorios .desktop .h2, .desktop .reviews-title { font-size: clamp(46px, min(5.8vw, 9.2vh), 84px) !important; }
 }
 @media (min-width: 900px) and (max-height: 820px) {
-  .desktop .h2, .faq-section h2, #accesorios .desktop .h2, .desktop .reviews-title, .diagnostic-intro h2 { font-size: clamp(46px, min(5.8vw, 8.2vh), 84px) !important; }
+  .desktop .h2, .faq-section h2, #accesorios .desktop .h2, .desktop .reviews-title { font-size: clamp(46px, min(5.8vw, 8.2vh), 84px) !important; }
 }
 /* B4: tablet map has no sideways scroll (credit no longer widens the row). */
 @media (min-width: 600px) and (max-width: 899px) {
@@ -4065,10 +4061,10 @@ body:has(.photo-lightbox[open]) .whatsapp-float { display: none; }
 /* ============ Short laptop screens (desktop layout, 640px tall or less) ============
    e.g. a MacBook with browser zoom, or a small laptop window. Everything scales with height. */
 @media (min-width: 900px) and (max-height: 640px) {
-  .s57, .s65, .s69, .s79, .s94, .diagnostic-section, .faq-section { padding-top: clamp(22px, 5vh, 60px) !important; padding-bottom: clamp(22px, 5vh, 60px) !important; }
+  .s57, .s65, .s69, .s79, .s94, .faq-section { padding-top: clamp(22px, 5vh, 60px) !important; padding-bottom: clamp(22px, 5vh, 60px) !important; }
   .s108 { padding-top: clamp(22px, 5vh, 60px); padding-bottom: clamp(22px, 5vh, 60px); }
   .specialist-section { padding-top: 22px; padding-bottom: 22px; }
-  .desktop .h2, .faq-section h2, #accesorios .desktop .h2, .desktop .reviews-title, .diagnostic-intro h2 { font-size: clamp(32px, min(5.8vw, 8.2vh), 84px) !important; }
+  .desktop .h2, .faq-section h2, #accesorios .desktop .h2, .desktop .reviews-title { font-size: clamp(32px, min(5.8vw, 8.2vh), 84px) !important; }
   .desktop .s37 { gap: 8px; }
   .desktop .mono.s12, .desktop .s60, .faq-section .mono { font-size: 11px; }
   /* Hero */
@@ -4083,12 +4079,6 @@ body:has(.photo-lightbox[open]) .whatsapp-float { display: none; }
   .hero-proof strong { font-size: clamp(24px, 5.6vh, 44px); }
   .hero-proof span.mono { font-size: 11px; }
   /* Reparaciones */
-  .diagnostic-intro { margin-bottom: 16px; }
-  .diagnostic-controls { display: grid !important; grid-template-columns: 1fr 1fr; align-content: start; }
-  .desktop .issue { min-height: 0; padding: 12px 14px; }
-  .diagnostic-panel .phone-exploded { max-width: calc((100vh - 190px) / 1.1); margin-inline: auto; }
-  .diagnostic-detail { gap: 10px; }
-  .diagnostic-detail h3 { font-size: clamp(24px, 5vh, 40px) !important; }
   /* 4 pasos */
   #proceso .desktop .s61 { margin-top: 18px; }
   #proceso .desktop .s62 { padding-top: 14px; padding-bottom: 14px; row-gap: 6px; }
@@ -4116,50 +4106,9 @@ body:has(.photo-lightbox[open]) .whatsapp-float { display: none; }
   .foot-bottom { margin-top: 16px; }
 }
 
-/* Reparaciones on laptop heights (desktop, up to 940px tall): two-column repair buttons and a
-   3D phone sized from the screen height, so selector, phone and details fit one screen. */
-@media (min-width: 900px) and (max-height: 940px) {
-  .diagnostic-section { padding-top: clamp(24px, 5vh, 100px) !important; padding-bottom: clamp(24px, 5vh, 100px) !important; }
-  .diagnostic-intro { margin-bottom: clamp(14px, 2.5vh, 48px); }
-  .diagnostic-controls { display: grid !important; grid-template-columns: 1fr 1fr; align-content: start; }
-  .desktop .issue { min-height: 0; padding: clamp(10px, 1.8vh, 20px) 14px; }
-  .diagnostic-panel { align-items: start; }
-  .diagnostic-panel .phone-exploded { max-width: calc((100vh - 69px - 10vh - 90px) / 1.1); margin-inline: auto; }
-  .diagnostic-detail { gap: clamp(6px, 1.2vh, 16px); padding-top: clamp(14px, 2.5vh, 32px); padding-bottom: clamp(14px, 2.5vh, 32px); }
-  .diagnostic-detail h3 { font-size: clamp(24px, 4.6vh, 44px) !important; }
-}
-@media (min-width: 900px) and (max-height: 940px) {
-  .diagnostic-panel { padding-top: clamp(12px, 2.6vh, 28px) !important; padding-bottom: clamp(12px, 2.6vh, 28px) !important; }
-  .diagnostic-panel { align-items: center !important; }
-}
-/* The warranty small print is also in the FAQ; on short laptop screens it gives way to the phone. */
-@media (min-width: 900px) and (max-height: 760px) { .diagnostic-detail .service-conditions { display: none; } }
-@media (min-width: 900px) and (max-height: 940px) {
-  #diagnostico .diagnostic-controls .issue { min-height: 0 !important; height: auto; padding: clamp(10px, 1.8vh, 18px) 14px; }
-  .diagnostic-controls { grid-auto-rows: min-content; }
-  .diagnostic-panel .phone-exploded { max-width: calc((100vh - 69px - 10vh - 150px) / 1.1) !important; }
-}
-/* Laptop heights: the six repairs become one row of tabs above the phone + details. */
-@media (min-width: 900px) and (max-height: 940px) {
-  .diagnostic-layout { grid-template-columns: minmax(0,1fr) !important; }
-  .diagnostic-controls { grid-template-columns: repeat(6, minmax(0,1fr)) !important; border-right: 0 !important; border-bottom: 1px solid var(--grey); }
-  #diagnostico .diagnostic-controls .issue { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; padding: clamp(8px, 1.6vh, 16px) 14px; border-right: 1px solid var(--grey); border-bottom: 0; }
-  #diagnostico .diagnostic-controls .issue:last-child { border-right: 0; }
-  #diagnostico .diagnostic-controls .issue .ar { display: none; }
-  #diagnostico .diagnostic-controls .issue .t { font-size: clamp(13px, 1.1vw, 16px); line-height: 1.15; }
-  .diagnostic-intro h2 { white-space: nowrap; }
-  .diagnostic-panel .phone-exploded { max-width: calc((100vh - 69px - 10vh - 215px) / 1.1) !important; }
-}
 /* Once the live map starts, the map area no longer scrolls sideways (that was for the static map). */
 .branch-map.is-map-loading .bm-mapwrap, .branch-map.has-live-map .bm-mapwrap { overflow: hidden; }
 .branch-map.is-map-loading .bm-stage { visibility: hidden; }
-@media (min-width: 900px) and (max-height: 940px) {
-  .diagnostic-panel .phone-exploded { max-width: calc((100vh - 69px - 10vh - 240px) / 1.1) !important; }
-}
-@media (min-width: 900px) and (max-width: 1180px) and (max-height: 940px) {
-  .diagnostic-intro { align-items: flex-end; }
-  .diagnostic-intro > p, .diagnostic-intro .diagnostic-desktop-copy { display: none; }
-}
 
 /* ============ Very short desktop viewports (up to 600px tall, e.g. a laptop with browser zoom) ============ */
 @media (min-width: 900px) and (max-height: 600px) {
@@ -4167,12 +4116,6 @@ body:has(.photo-lightbox[open]) .whatsapp-float { display: none; }
   #proceso .desktop .s61 { grid-template-columns: repeat(4, minmax(0,1fr)) !important; column-gap: 20px; }
   #proceso .desktop .s63 { font-size: clamp(18px, 2.1vw, 30px); }
   #proceso .desktop .s64 { font-size: 13px; line-height: 1.45; }
-  /* Reparaciones: timing and warranty side by side, smaller replay button */
-  .service-description .s52 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; }
-  .service-description .s52 > * { flex-direction: column; align-items: flex-start; gap: 2px; padding-top: 8px; padding-bottom: 8px; }
-  .diagnostic-detail .repair-replay { min-height: 34px; padding-top: 4px; padding-bottom: 4px; }
-  .diagnostic-detail .s51 { font-size: 14px; }
-  .diagnostic-panel .phone-exploded { max-width: calc((100vh - 69px - 10vh - 175px) / 1.1) !important; }
   /* Accesorios: copy and tiles side by side */
   #accesorios .desktop .s95 { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 32px; }
   #accesorios .desktop .s96 { gap: 12px; }
@@ -4194,15 +4137,8 @@ body:has(.photo-lightbox[open]) .whatsapp-float { display: none; }
   #sucursales .desktop .s36 .btn { min-height: 46px; }
 }
 @media (min-width: 900px) and (max-height: 600px) {
-  .diagnostic-panel { position: relative; }
-  .diagnostic-detail > .mono.accent, .diagnostic-detail .service-description > .mono.accent { display: none; }
-  .diagnostic-panel .phone-exploded .phone-note { display: none; }
   #sucursales .desktop .bcard .branch-actions { grid-template-columns: minmax(0,1fr) !important; }
   #sucursales .desktop .bcard-mapchip { padding: 0; width: 34px; justify-content: center; font-size: 0; gap: 0; }
-}
-@media (min-width: 900px) and (max-height: 600px) {
-  .diagnostic-section { padding-top: clamp(16px, 3.6vh, 24px) !important; padding-bottom: clamp(16px, 3.6vh, 24px) !important; }
-  .diagnostic-intro { margin-bottom: 10px; }
 }
 @media (min-width: 900px) and (max-height: 600px) {
   #sucursales .desktop .bcard .bcard-mapchip { width: 34px !important; height: 34px; padding: 0 !important; justify-content: center; font-size: 0 !important; gap: 0 !important; }
@@ -4220,16 +4156,70 @@ body:has(.photo-lightbox[open]) .whatsapp-float { display: none; }
   .foot-bottom { margin-top: 10px; }
   #preguntas .wrap { padding-right: 72px; }
   #sucursales .desktop .bcard .bcard-mapchip { width: 40px !important; height: 40px; }
-  .diagnostic-detail .repair-replay { min-height: 40px; }
   #sucursales .desktop .bcard .branch-actions a { min-height: 40px !important; }
   #accesorios .desktop .acc-features { letter-spacing: .06em; font-size: 10.5px; }
 }
 .reviews-pause { min-height: 40px; }
-@media (min-width: 900px) and (max-height: 940px) {
-  .diagnostic-section { padding-bottom: clamp(14px, 3vh, 80px) !important; }
+
+/* ============ Relative section rhythm (desktop) ============
+   One spacing scale tied to screen height, so the gap between a section's title and its content
+   stays proportional on every screen instead of fixed pixel values. */
+:root { --stack: clamp(20px, 5.5vh, 64px); }
+@media (min-width: 900px) {
+  #proceso .desktop .s59 { gap: var(--stack); }
+  #proceso .desktop .s61 { margin-top: 0 !important; }
+  .s65.desktop .s35 { gap: var(--stack); }
+  #resenas .desktop .s70 { margin-bottom: var(--stack) !important; }
+  #sucursales .desktop .s80 { gap: var(--stack); }
+  #sucursales .desktop .s82 { margin-top: 0 !important; }
+  .faq-section h2 { margin-bottom: var(--stack) !important; }
 }
-@media (min-width: 900px) and (max-height: 600px) {
-  .diagnostic-detail { gap: 4px !important; padding-top: 6px !important; padding-bottom: 6px !important; }
-  .diagnostic-detail h3 { font-size: clamp(22px, 4.6vh, 30px) !important; }
-  .diagnostic-detail .repair-replay { margin: 2px 0 4px; }
+
+/* ============ Reparaciones (desktop): one relative layout for every screen ============
+   Sizes come from the section width (cqi) and the screen height (vh) instead of fixed pixels.
+   The intro text and the details column share --diag-detail, so their left edges line up, and the
+   intro text sits on the title's last baseline. */
+@media (min-width: 900px) {
+  .diagnostic-wrap {
+    container-type: inline-size;
+    --diag-detail: clamp(270px, 34cqi, 440px);
+    --diag-gap: clamp(16px, 2.4cqi, 24px);
+    --diag-pad: clamp(14px, 2.4cqi, 28px);
+  }
+  .diagnostic-section { padding-top: clamp(14px, 4.5vh, 120px) !important; padding-bottom: clamp(14px, 4.5vh, 120px) !important; }
+  .diagnostic-intro {
+    display: grid; grid-template-columns: minmax(0, 1fr) var(--diag-detail); column-gap: var(--diag-gap);
+    align-items: last baseline; padding-right: calc(var(--diag-pad) + 1px);
+    margin-bottom: calc(var(--stack) * .6);
+  }
+  /* Same scale as the other section titles, capped so it wraps to at most two lines in its column. */
+  .diagnostic-intro h2 { max-width: none; font-size: min(clamp(30px, min(5.8vw, 8.2vh), 84px), calc((100cqi - var(--diag-detail) - var(--diag-gap) - var(--diag-pad)) / 9.8)); }
+  .diagnostic-intro .mono { margin-bottom: clamp(6px, 1.6vh, 18px); }
+  .diagnostic-intro-copy { max-width: none; margin: 0; font-size: clamp(14px, min(1.25vw, 2.6vh), 18px); }
+  .diagnostic-controls .issue { min-height: 0; grid-template-columns: clamp(20px, 2.4cqi, 36px) minmax(0, 1fr) 16px; gap: clamp(6px, 1cqi, 12px); padding: clamp(6px, 1.7vh, 16px) clamp(10px, 1.6cqi, 20px); }
+  .diagnostic-controls .t { font-size: clamp(14px, min(1.5vw, 2.7vh), 18px); }
+  .diagnostic-panel {
+    grid-template-columns: minmax(0, 1fr) var(--diag-detail); gap: var(--diag-gap);
+    padding: clamp(10px, 2.6vh, 28px) var(--diag-pad);
+  }
+  .diagnostic-panel .phone-exploded { max-width: clamp(140px, calc((100vh - 69px) * .5 - 40px), 420px); margin-inline: auto; }
+  /* Top-aligned, so the name and button don't jump when a repair has no replay button. */
+  .diagnostic-detail { gap: clamp(5px, 1.4vh, 16px); align-self: start; }
+  .diagnostic-detail .repair-replay { min-height: clamp(36px, 6vh, 44px); }
+  /* The small caption stays on one line, centered under the phone even when the phone is narrow. */
+  .diagnostic-panel .phone-note { white-space: nowrap; margin-inline: -80px; text-align: center; }
+  .diagnostic-detail h3 { font-size: clamp(22px, min(2.4vw, 4.6vh), 34px); }
+  .diagnostic-detail p { font-size: clamp(14px, min(1.1vw, 2.4vh), 16px); }
+  .diagnostic-detail .btn { min-height: clamp(44px, 7vh, 56px); }
 }
+/* Shorter screens: the warranty small print (also in the FAQ) gives way, and timing and warranty sit side by side. */
+@media (min-width: 900px) and (max-height: 760px) { .diagnostic-detail .service-conditions { display: none; } }
+@media (min-width: 900px) and (max-height: 640px) {
+  /* Two equal columns; values wrap inside their column and stay top-aligned with each other. */
+  .service-description .s52 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--diag-gap); align-items: start; }
+  .service-description .s52 > * { justify-content: flex-start; }
+  .service-description .s52 > * > :last-child { font-size: clamp(13px, min(1.4vw, 2.8vh), 16px); text-wrap: balance; }
+  .service-description .s52 > * { flex-direction: column; align-items: flex-start; gap: 2px; padding-top: 8px; padding-bottom: 8px; }
+}
+/* The number is already on the selected repair button, so the details don't repeat it. */
+.service-description > .mono.accent { display: none; }
