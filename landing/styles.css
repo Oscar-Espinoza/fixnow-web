@@ -4232,3 +4232,5 @@ body:has(.photo-lightbox[open]) .whatsapp-float { display: none; }
   .diagnostic-intro-copy { order: 2; margin: 0 0 10px; }
   .diagnostic-intro h2 { order: 3; }
 }
+/* The warranty small print fills each line ("pretty" wrapping left it ragged and narrow on phones). */
+.service-conditions { text-wrap: wrap; }
