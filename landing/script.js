@@ -335,6 +335,18 @@ document.querySelectorAll('.faq-list details').forEach(item => {
   });
 });
 
+// Links to a FAQ question (e.g. "Ver condiciones" → #garantia) open that answer as they scroll to it.
+const openFaq = id => {
+  const item = id && document.getElementById(id);
+  if (item && item.matches('.faq-list details') && !item.open) { item.open = true; item.classList.add('is-open'); }
+};
+document.addEventListener('click', event => {
+  const link = event.target.closest('a[href^="#"]');
+  if (link) openFaq(decodeURIComponent(link.getAttribute('href').slice(1)));
+});
+window.addEventListener('hashchange', () => openFaq(decodeURIComponent(location.hash.slice(1))));
+openFaq(decodeURIComponent(location.hash.slice(1)));
+
 // Mobile branches: one full-width card at a time. The title and the name buttons follow the card in view,
 // and tapping a name scrolls to that branch.
 const branchSnap = document.getElementById('branch-snap');
