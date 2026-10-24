@@ -35,5 +35,5 @@ ErrorDocument 404 /404.html
   <FilesMatch "\.[0-9a-f]{12}\.(?:css|js|mjs|json|svg|webp|png|jpe?g|ico|woff2|webmanifest)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
-  Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'"
+  Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://tiles.openfreemap.org; connect-src 'self' https://tiles.openfreemap.org; worker-src 'self' blob:; child-src blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'"
 </IfModule>

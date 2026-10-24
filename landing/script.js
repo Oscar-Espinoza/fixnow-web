@@ -471,31 +471,63 @@ if (branchSnap) {
 const branchMap = document.getElementById('branch-map');
 if (branchMap && branchMap.showModal) {
   // One branch is selected at a time: its pin, its row and its details (hours, WhatsApp, Cómo llegar).
+  // The interactive map (MapLibre, loaded on first open) replaces the static picture; the picture stays
+  // as the fallback if the map can't load (no WebGL, offline).
   const mapWrap = branchMap.querySelector('.bm-mapwrap');
   const mapStage = branchMap.querySelector('.bm-stage');
+  let liveMap = null, liveLoading = null;
   const pick = (index, {center = true, smooth = true} = {}) => {
     branchMap.querySelectorAll('.bm-pin, .bm-item').forEach(el => el.setAttribute('aria-pressed', String(Number(el.dataset.branch) === index)));
     branchMap.querySelectorAll('.bm-detail').forEach(el => { el.hidden = Number(el.dataset.branch) !== index; });
-    // On phones the map is wider than the screen: slide it so the chosen pin sits in the middle.
-    const pin = branchMap.querySelector(`.bm-pin[data-branch="${index}"]`);
+    if (liveMap) { if (center) liveMap.focus(index, {animate: smooth && !matchMedia('(prefers-reduced-motion: reduce)').matches}); return; }
+    // Static fallback: on phones the picture is wider than the screen, so slide the chosen pin to the middle.
+    const pin = mapStage.querySelector(`.bm-pin[data-branch="${index}"]`);
     if (center && pin && mapWrap.scrollWidth > mapWrap.clientWidth) {
       const left = mapStage.offsetWidth * parseFloat(pin.style.left) / 100 - mapWrap.clientWidth / 2;
       mapWrap.scrollTo({left: Math.max(0, left), behavior: smooth && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto'});
     }
   };
+  // Branch coordinates come from the JSON-LD business info, so they live in one place.
+  const branchPoints = () => {
+    const graph = JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent)['@graph'];
+    return [...branchMap.querySelectorAll('.bm-item')].map(item => {
+      const name = item.querySelector('b').textContent.trim();
+      const node = graph.find(n => n.name === 'FixNow ' + name);
+      return {name, lngLat: [node.geo.longitude, node.geo.latitude]};
+    });
+  };
+  const startLiveMap = index => {
+    if (liveLoading) return liveLoading;
+    const host = document.createElement('div');
+    host.className = 'bm-live';
+    mapWrap.append(host);
+    const phone = matchMedia('(max-width: 899px)').matches;
+    liveLoading = import('./assets/branch-map.js?v=20261015181305').then(({mountBranchMap}) => {
+      const map = mountBranchMap(host, branchPoints(), {initial: index, bottomPadding: phone ? 30 : 0, onPick: i => pick(i)});
+      return map.ready.then(() => {
+        liveMap = map;
+        branchMap.classList.add('has-live-map');
+        const current = Number(branchMap.querySelector('.bm-item[aria-pressed="true"]')?.dataset.branch || index);
+        map.resize();
+        // First view: all four branches; picking one then slides to it.
+        pick(current, {center: false});
+        map.overview();
+      });
+    }).catch(() => { host.remove(); liveLoading = null; });
+    return liveLoading;
+  };
   branchMap.querySelectorAll('.bm-pin, .bm-item').forEach(el => el.addEventListener('click', () => pick(Number(el.dataset.branch))));
   document.querySelectorAll('[data-open-map]').forEach(button => button.addEventListener('click', event => {
     const overview = branchMap.querySelector('img[data-src]');
-    // Preview of map styles: ?map=brand | paper | ink (temporary, for choosing a style).
-    const style = new URLSearchParams(location.search).get('map');
-    const pick = (style && overview?.dataset[style + 'Src']) || overview?.dataset.src;
-    if (overview && overview.getAttribute('src') !== pick) overview.src = pick;
-    ['brand', 'paper', 'ink', 'illustrated'].forEach(name => branchMap.classList.toggle('is-' + name + '-map', style === name));
+    if (overview && !overview.hasAttribute('src')) overview.src = overview.dataset.src;
     branchMap.showModal();
     // Start on the branch the visitor was looking at in Sucursales (phones), otherwise the first one.
     const chosen = event.currentTarget.dataset.branch;
     const current = chosen !== undefined ? Number(chosen) : Number(document.querySelector('[data-branch-dot][aria-pressed="true"]')?.dataset.branchDot || 0);
-    requestAnimationFrame(() => pick(current, {smooth: false}));
+    requestAnimationFrame(() => {
+      if (liveMap) { pick(current, {center: false}); liveMap.resize(); liveMap.overview(); }
+      else { pick(current, {smooth: false}); startLiveMap(current); }
+    });
   }));
   // Fade and lift the dialog out before it actually closes.
   const closeMap = () => {

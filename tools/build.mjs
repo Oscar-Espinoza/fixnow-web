@@ -15,6 +15,9 @@ const entries=['index.html','privacidad.html','404.html','robots.txt','sitemap.x
 const graph=await scan('landing',entries);
 const bundle=await build({entryPoints:['landing/assets/phone3d.js'],bundle:true,minify:true,format:'esm',target:'es2022',write:false,legalComments:'inline'});
 graph.set('assets/phone3d.js',Buffer.from(bundle.outputFiles[0].text));
+// The interactive branch map (MapLibre) is bundled the same way and loaded only when its dialog opens.
+const mapBundle=await build({entryPoints:['landing/assets/branch-map.js'],bundle:true,minify:true,format:'esm',target:'es2022',write:false,legalComments:'inline',loader:{'.css':'text'},alias:{'maplibre-gl-css':'maplibre-gl/dist/maplibre-gl.css'}});
+graph.set('assets/branch-map.js',Buffer.from(mapBundle.outputFiles[0].text));
 for(const file of ['styles.css','script.js'])graph.set(file,Buffer.from((await transform(graph.get(file).toString(),{loader:file.endsWith('.css')?'css':'js',minify:true,target:'es2022',legalComments:'inline'})).code));
 // Vendor is included by esbuild and is not a separate runtime request.
 for(const file of [...graph.keys()])if(file.startsWith('assets/vendor/'))graph.delete(file);
