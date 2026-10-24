@@ -3655,3 +3655,378 @@ footer a.footer-legal:hover {
   #contacto > .mobile { min-height: 0; display: block; }
   #contacto > .mobile .s200 { min-height: 0; display: block; flex: none; padding-top: 56px; padding-bottom: 56px; }
 }
+
+/* ======================= Branch map dialog (rebuilt) =======================
+   Desktop: map on the left at full height, branch list + selected branch on the right.
+   Phones: full-screen map (pans sideways, pins at a readable size) with a bottom panel. */
+.branch-map .bm-stage { position: relative; aspect-ratio: 960 / 600; background: #ECEEF1; flex: 0 0 auto; }
+.branch-map .bm-stage img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.bm-pin { position: absolute; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 6px; border: 0; background: none; cursor: pointer; transform: translate(-50%, -23px); -webkit-tap-highlight-color: transparent; }
+.bm-pin-dot { display: grid; place-items: center; width: 34px; height: 34px; border: 3px solid #fff; border-radius: 50%; background: var(--blue); color: #fff; font: 800 15px/1 "Montserrat", system-ui, sans-serif; box-shadow: 0 0 0 8px rgba(0,102,255,.16), 0 4px 10px rgba(0,0,0,.18); transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
+.bm-pin-label { padding: 4px 9px; border-radius: 999px; background: #fff; color: #141414; font: 700 11px/1.2 "Montserrat", system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.bm-pin[aria-pressed="true"] { z-index: 2; }
+.bm-pin[aria-pressed="true"] .bm-pin-dot { background: #141414; transform: scale(1.15); box-shadow: 0 0 0 8px rgba(20,20,20,.12), 0 6px 14px rgba(0,0,0,.25); }
+.bm-pin[aria-pressed="true"] .bm-pin-label { background: #141414; color: #fff; }
+.branch-map .bm-mapwrap { position: relative; background: #ECEEF1; }
+.branch-map .bm-mapwrap .bmap-credit { position: absolute; right: 8px; bottom: 8px; z-index: 3; }
+.branch-map .bm-list { display: block; list-style: none; margin: 0; padding: 0; }
+.branch-map .bm-list li { display: block; padding: 0; border: 0; }
+.bm-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px; border: 1px solid transparent; border-radius: 8px; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; transition: background .15s ease, border-color .15s ease; }
+.bm-item:hover { background: #F6F7F9; }
+.bm-item[aria-pressed="true"] { background: #F2F6FF; border-color: rgba(0,102,255,.28); }
+.bm-item[aria-pressed="true"] .bm-num { background: #141414; }
+.bm-item .bm-num { flex: 0 0 32px; }
+.bm-item-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.bm-item-txt b { font-size: 16px; font-weight: 800; }
+.bm-item-txt span { font-size: 13px; color: var(--body-grey); }
+.bm-detail-name { margin: 0; font-size: 22px; text-transform: uppercase; }
+.bm-detail-addr { margin: 4px 0 0; font-size: 15px; color: var(--body-grey); }
+.bm-detail .branch-hours { margin: 6px 0 0; font-size: 13px; line-height: 1.5; color: var(--black); }
+.bm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.bm-actions a { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 12px; border-radius: 4px; font-size: 15px; font-weight: 700; text-decoration: none; }
+.bm-actions .bm-wa { background: #25D366; color: #fff; }
+.bm-actions .bm-wa:hover { background: #1ebe5b; }
+.bm-actions .bm-go { border: 1.5px solid var(--black); color: var(--black); }
+.bm-actions .bm-go:hover { background: var(--black); color: #fff; }
+body:has(.branch-map[open]) .whatsapp-float { display: none; }
+
+@media (min-width: 900px) {
+  .branch-map { width: min(1120px, calc(100% - 48px)); height: min(680px, calc(100dvh - 48px)); max-height: none; overflow: hidden; }
+  .branch-map[open] { display: flex; flex-direction: column; }
+  .branch-map .bm-head { flex: 0 0 auto; padding: 16px 20px 16px 24px; border-bottom: 1px solid rgba(20,20,20,.08); }
+  .branch-map .bm-head h2 { font-size: 28px; }
+  .branch-map .bm-body { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(0,1fr) 340px; }
+  .branch-map .bm-mapwrap { display: flex; align-items: center; justify-content: center; min-height: 0; overflow: hidden; }
+  /* The map keeps its proportions and is as large as the space allows (pins stay on their streets). */
+  .branch-map .bm-stage { width: min(100%, calc((min(680px, 100dvh - 48px) - 77px) * 1.6)); }
+  .branch-map .bm-panel { display: flex; flex-direction: column; gap: 14px; min-height: 0; overflow-y: auto; padding: 16px; border-left: 1px solid rgba(20,20,20,.08); }
+  .branch-map .bm-list li + li { margin-top: 4px; }
+  .bm-detail { padding: 16px; border: 1px solid rgba(20,20,20,.1); border-radius: 8px; }
+  .bm-detail-name, .bm-detail-addr { display: none; }
+  .bm-detail .branch-hours { margin-top: 0; }
+}
+
+@media (max-width: 899px) {
+  .branch-map { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; border-radius: 0; overflow: hidden; }
+  .branch-map[open] { display: flex; flex-direction: column; }
+  .branch-map::backdrop { background: rgba(20,20,20,.4); }
+  .branch-map .bm-head { flex: 0 0 auto; min-height: 56px; padding: 6px 8px 6px 20px; border-bottom: 1px solid rgba(20,20,20,.08); }
+  .branch-map .bm-head h2 { font-size: 18px; }
+  .branch-map .bm-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+  /* Full-height map that pans sideways: pins are about twice as large as in a fitted map. */
+  .branch-map .bm-mapwrap { flex: 1 1 auto; min-height: 0; overflow-x: auto; overflow-y: hidden; overscroll-behavior: contain; scrollbar-width: none; }
+  .branch-map .bm-mapwrap::-webkit-scrollbar { display: none; }
+  .branch-map .bm-stage { height: 100%; width: auto; }
+  .branch-map .bm-mapwrap .bmap-credit { position: sticky; float: right; top: auto; margin: -28px 8px 0 0; }
+  .branch-map .bm-panel { flex: 0 0 auto; position: relative; z-index: 4; margin-top: -16px; padding: 10px 20px calc(16px + env(safe-area-inset-bottom)); border-radius: 16px 16px 0 0; background: #fff; box-shadow: 0 -8px 24px rgba(0,0,0,.12); }
+  .branch-map .bm-panel::before { content: ""; display: block; width: 40px; height: 4px; margin: 0 auto 12px; border-radius: 2px; background: rgba(20,20,20,.15); }
+  .branch-map .bm-list { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; }
+  .bm-item { flex-direction: column; justify-content: center; gap: 4px; min-height: 60px; padding: 8px 2px; border-color: rgba(20,20,20,.1); text-align: center; }
+  .bm-item .bm-num { flex: 0 0 auto; width: 26px; height: 26px; font-size: 12px; }
+  .bm-item-txt b { font-size: 11px; line-height: 1.2; }
+  .bm-item-txt span { display: none; }
+  .bm-details { margin-top: 14px; }
+}
+@media (max-width: 899px) and (max-height: 700px) {
+  .bm-detail-name { font-size: 19px; }
+  .bm-actions { margin-top: 10px; }
+  .bm-actions a { min-height: 44px; }
+}
+@media (max-width: 899px) {
+  .branch-map, .branch-map[open] { position: fixed; inset: 0; width: 100%; height: 100%; max-width: 100%; max-height: 100%; margin: 0; }
+}
+@media (min-width: 900px) { .bm-actions a { white-space: nowrap; gap: 6px; padding: 0 8px; font-size: 14px; } }
+
+/* Desktop hero on short screens (e.g. 1366x640 laptops): scale the copy to the height so the stats bar stays on the first screen. */
+@media (min-width: 900px) and (max-height: 820px) {
+  .hero-copy { padding: calc(var(--header-h, 69px) + 20px) 0 28px; }
+  .hero-eyebrow { margin-bottom: 14px; }
+  .real-hero h1 { font-size: clamp(44px, min(5.8vw, 10.5vh), 84px); }
+  .hero-description { margin-top: 14px; font-size: 16px; line-height: 1.55; }
+  .hero-actions { margin-top: 18px; }
+  .hero-cash { margin-top: 12px; }
+  .hero-proof > * { padding-top: 16px; padding-bottom: 16px; }
+  .hero-proof strong { font-size: clamp(30px, 5.2vh, 44px); }
+}
+/* Branch cards: equal-height cards with the WhatsApp + "Cómo llegar" buttons pinned to the bottom, so they line up across cards. */
+.bcard { display: flex; flex-direction: column; }
+.bcard > .s84, .bcard > .s185 { flex: 1 1 auto; display: flex; flex-direction: column; }
+.bcard .branch-wa { margin-top: auto !important; }
+.bcard .branch-hours + .branch-wa, .bcard .branch-note + .branch-wa { margin-top: auto !important; }
+.bcard .s84 .branch-wa, .bcard .s185 .branch-wa { position: relative; top: 0; }
+.bcard .s84 > .branch-note, .bcard .s185 > .branch-note { margin-bottom: 14px; }
+.bcard .s84 > .branch-hours:nth-last-child(3), .bcard .s185 > .branch-hours:nth-last-child(3) { margin-bottom: 14px; }
+@media (min-width: 900px) and (max-width: 1199px) { #sucursales .desktop .s82 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+/* ===================== QA pass 1 (2026-10-23) ===================== */
+/* 1–3 Desktop grids: no lonely last item; step titles reserve two lines so descriptions start level. */
+@media (min-width: 900px) and (max-width: 1199px) { #proceso .desktop .s61 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (min-width: 1200px) { #proceso .desktop .s61 { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+@media (min-width: 900px) { .desktop .s66 { grid-template-columns: repeat(3, minmax(0,1fr)); } .desktop .s63 { min-height: 2.04em; } }
+/* 4–5 One 16px phone gutter everywhere; tablet hero copy starts on the gutter, not centred. */
+@media (max-width: 899px) {
+  .hero-copy { padding-left: 16px; padding-right: 16px; max-width: none; }
+  .hero-fold .hero-workshop { padding-left: 16px; padding-right: 16px; }
+  .hero-fold .hero-proof { padding-left: 16px; padding-right: 16px; }
+  .hero-timing-note { padding-left: 16px; padding-right: 16px; }
+  .content-wrap { padding-left: 16px; padding-right: 16px; }
+  .hero-description { max-width: 560px; }
+}
+/* 6 Primary buttons share one weight, size and height on phones. */
+.btn.s56 { font-weight: 700; }
+@media (max-width: 899px) {
+  .btn.s56, .real-hero .hero-cta-primary, .bcard .branch-wa, .acc-cta, .btn.s203, .bm-actions a { min-height: 48px; font-size: 15px; font-weight: 700; }
+  .bcard .branch-directions { min-height: 48px; }
+}
+@media (min-width: 900px) { .btn.s56 { font-size: 15px; min-height: 48px; } }
+/* 7 One h2 scale for every section title (phones and desktop), all uppercase. */
+.mobile .reviews-title, .faq-section h2, #accesorios .h2, .specialist-section h2 { line-height: 1.02 !important; }
+@media (max-width: 899px) {
+  .mobile .reviews-title, .faq-section h2, #accesorios .mobile .h2 { font-size: clamp(38px, 11vw, 54px) !important; }
+}
+@media (min-width: 900px) {
+  .faq-section h2, #accesorios .desktop .h2, .desktop .reviews-title { font-size: clamp(46px, 5.8vw, 84px) !important; }
+}
+.diagnostic-intro h2 { text-transform: uppercase; }
+/* 8 FAQ / Jhon containers on the same 1280 grid as the other sections. */
+.content-wrap { max-width: 1280px; }
+/* 9 Review source is plain text now: no tap-target height. */
+.review-source { min-height: 0 !important; display: inline !important; }
+/* 10 Map dialog: room for edge labels; on tablets the whole map fits the width (all 4 pins visible). */
+@media (max-width: 599px) { .branch-map .bm-stage { margin: 0 56px; } }
+@media (min-width: 600px) and (max-width: 899px) {
+  .branch-map .bm-mapwrap { display: flex; align-items: center; overflow: hidden; }
+  .branch-map .bm-stage { width: 100%; height: auto; max-height: 100%; }
+}
+/* 11 Map dialog tabs: equal heights. */
+.branch-map .bm-list li { display: flex; }
+.branch-map .bm-list .bm-item { flex: 1 1 auto; }
+/* 12 Sucursales phone heading: both lines the same size, branch name on one line. */
+@media (max-width: 899px) {
+  #sucursales .mobile h2 { font-size: clamp(30px, 9.2vw, 44px) !important; }
+  #sucursales .mobile .branch-title { font-size: 1em; }
+}
+/* 14 Feature strip and footer branch list never wrap on a separator. */
+@media (max-width: 899px) {
+  .mobile .acc-features { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .mobile .acc-features .acc-dot { display: none; }
+}
+.foot-branches { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding-top: 4px; }
+.foot-branches span { display: block; }
+/* 15 Tap targets ≥ 44px. */
+.branch-tab, #contacto .foot-row, .foot-row { min-height: 44px !important; }
+.specialist-section .ig-link { padding: 14px 0; margin: -14px 0; }
+.why a[href="#garantia"] { padding: 14px 4px; margin: -14px -4px; }
+/* 16 Service facts: label and value on one baseline. */
+.s53 { align-items: baseline; }
+/* 17 No one-word last lines. */
+p, h3, summary, li, .bm-detail-addr { text-wrap: pretty; }
+
+/* Desktop sizes follow the screen HEIGHT as well as the width, so wide-but-short screens
+   (e.g. a 1366x768 laptop showing ~650px of page) get the same proportions as a big monitor. */
+@media (min-width: 900px) {
+  .s57, .s65, .s69, .s79, .s94 { padding-top: clamp(56px, 13vh, 120px); padding-bottom: clamp(56px, 13vh, 120px); }
+  .s108 { padding-top: clamp(56px, 12vh, 110px); padding-bottom: clamp(56px, 12vh, 110px); }
+  .diagnostic-section { padding-top: clamp(56px, 11vh, 100px); padding-bottom: clamp(56px, 11vh, 100px); }
+  .faq-section { padding-top: clamp(48px, 9vh, 80px); padding-bottom: clamp(48px, 9vh, 80px); }
+  .specialist-section { padding-top: clamp(36px, 6vh, 56px); padding-bottom: clamp(36px, 6vh, 56px); }
+  .desktop .h2, .faq-section h2, #accesorios .desktop .h2, .desktop .reviews-title { font-size: clamp(40px, min(5.8vw, 9.2vh), 84px) !important; }
+  .desktop .s70 { margin-bottom: clamp(20px, 4vh, 28px); gap: clamp(16px, 3vh, 32px); }
+  .desktop .s72 { font-size: clamp(48px, 8vh, 72px) !important; }
+  #contacto .desktop .s110 { font-size: clamp(56px, min(9vw, 15vh), 136px) !important; }
+}
+@media (min-width: 900px) and (max-height: 820px) {
+  .s57, .s65, .s69, .s79, .s94 { padding-top: clamp(44px, 9vh, 120px); padding-bottom: clamp(44px, 9vh, 120px); }
+  .desktop .h2, .faq-section h2, #accesorios .desktop .h2, .desktop .reviews-title { font-size: clamp(38px, min(5.8vw, 8.2vh), 84px) !important; }
+  .desktop .rcard { padding: 22px 24px; gap: 14px; }
+  .desktop .s78 { font-size: 17px; line-height: 1.45; }
+  .desktop .s72 { font-size: clamp(44px, 7vh, 72px) !important; }
+}
+
+/* ===================== QA pass 2 ===================== */
+/* Item 6: one primary-button size on phones, winning over older, more specific rules. */
+@media (max-width: 899px) {
+  #sucursales .mobile .bcard .branch-wa, #sucursales .mobile .bcard .branch-directions,
+  #accesorios .mobile .btn.acc-cta, footer#contacto .mobile .btn.s203 { min-height: 48px; font-size: 15px; font-weight: 700; }
+}
+/* Item 11: map dialog tabs stretch to the tallest one. */
+.branch-map .bm-list li { align-items: stretch; }
+/* Item 17: two-line titles balance their lines; quotes avoid one-word last lines. */
+h3, .s63, .s172 { text-wrap: balance; }
+blockquote, .s78, .s180 { text-wrap: pretty; }
+/* B1: "¿Qué necesitás reparar?" follows the same height-aware title scale; floor stays at 46px. */
+@media (min-width: 900px) {
+  .desktop .h2, .faq-section h2, #accesorios .desktop .h2, .desktop .reviews-title, .diagnostic-intro h2 { font-size: clamp(46px, min(5.8vw, 9.2vh), 84px) !important; }
+}
+@media (min-width: 900px) and (max-height: 820px) {
+  .desktop .h2, .faq-section h2, #accesorios .desktop .h2, .desktop .reviews-title, .diagnostic-intro h2 { font-size: clamp(46px, min(5.8vw, 8.2vh), 84px) !important; }
+}
+/* B4: tablet map has no sideways scroll (credit no longer widens the row). */
+@media (min-width: 600px) and (max-width: 899px) {
+  .branch-map .bm-mapwrap .bmap-credit { position: absolute; float: none; margin: 0; right: 8px; bottom: 8px; }
+}
+/* B5: anchored FAQ item clears the sticky header. */
+#garantia, .faq-list details { scroll-margin-top: calc(var(--header-h, 69px) + 16px); }
+
+/* Branch card buttons live in one container: stacked on phones, side by side on desktop, always at the card bottom. */
+.bcard .branch-actions { margin-top: auto; padding-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.bcard .branch-actions .branch-wa, .bcard .branch-actions .branch-directions { margin-top: 0 !important; }
+
+/* Desktop Sucursales: title on one line beside the map button; 2x2 horizontal cards
+   (photo over street map on the left, details + buttons on the right) so the section fits a laptop screen. */
+@media (min-width: 900px) and (max-height: 860px) {
+  #sucursales .desktop .s36 { align-items: center; flex-wrap: nowrap; }
+  #sucursales .desktop .s37 { gap: 12px; }
+  #sucursales .desktop .s37 h2 br { display: none; }
+  #sucursales .desktop .s37 h2 { white-space: nowrap; }
+  #sucursales .desktop .s82 { grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 16px; margin-top: clamp(20px, 3.5vh, 36px); }
+  #sucursales .desktop .bcard { display: grid; grid-template-columns: clamp(200px, 19vw, 260px) minmax(0,1fr); grid-template-rows: 1fr 1fr; min-height: clamp(210px, 30vh, 260px); }
+  #sucursales .desktop .bcard > .branch-photo { grid-column: 1; grid-row: 1 / span 2; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
+  #sucursales .desktop .bcard > .bmap { grid-column: 1; grid-row: 2; height: auto; min-height: 0; border-top: 1px solid rgba(20,20,20,.08); }
+  #sucursales .desktop .bcard > .bmap .bmap-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  #sucursales .desktop .bcard > .s84 { grid-column: 2; grid-row: 1 / span 2; padding: 18px 20px; gap: 4px; border-left: 1px solid rgba(20,20,20,.08); }
+  #sucursales .desktop .bcard h3 { font-size: clamp(24px, 2.2vw, 32px); }
+  #sucursales .desktop .bcard .s86 { font-size: 15px; }
+  #sucursales .desktop .bcard .branch-hours, #sucursales .desktop .bcard .branch-note { font-size: 13px; }
+  #sucursales .desktop .bcard .branch-actions { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(0,1fr); }
+  #sucursales .desktop .bcard .branch-actions a { min-height: 44px; padding: 0 10px; font-size: 13.5px; white-space: nowrap; }
+  #sucursales .desktop .bcard .bcoord { display: none; }
+}
+/* Desktop Sucursales tighter for laptop heights; buttons stack where the card is narrow. */
+@media (min-width: 900px) and (max-height: 860px) {
+  .s79 { padding-top: clamp(28px, 6vh, 120px); }
+  #sucursales .desktop .s82 { margin-top: clamp(16px, 2.5vh, 36px); }
+  #sucursales .desktop .bcard { min-height: clamp(190px, 28vh, 260px); }
+  #sucursales .desktop .bcard > .s84 { padding: 14px 18px; }
+  #sucursales .desktop .bcard .branch-actions { padding-top: 10px; }
+  #sucursales .desktop .bcard { cursor: pointer; transition: border-color .2s ease, box-shadow .2s ease; }
+  .branch-title-desk { display: inline-block; white-space: nowrap; }
+  .branch-title-desk.is-swapping { animation: branch-title-in .32s cubic-bezier(.2,.7,.2,1); }
+}
+@media (min-width: 900px) and (max-height: 860px) and (max-width: 1199px) {
+  #sucursales .desktop .bcard { grid-template-columns: 136px minmax(0,1fr); }
+  #sucursales .desktop .bcard .branch-actions { grid-template-columns: minmax(0,1.45fr) minmax(0,1fr); gap: 6px; }
+  #sucursales .desktop .bcard .branch-actions a { font-size: 12.5px; padding: 0 6px; gap: 5px; }
+}
+@media (min-width: 900px) and (max-height: 820px) { .s79 { padding-top: clamp(24px, 4vh, 120px); } }
+@media (prefers-reduced-motion: reduce) { .branch-title-desk.is-swapping { animation: none; } }
+@media (min-width: 900px) and (max-height: 860px) and (max-width: 999px) { #sucursales .desktop .bcard .branch-actions { grid-template-columns: minmax(0,1fr); } }
+@media (min-width: 900px) and (max-height: 820px) { #sucursales .desktop .s82 { gap: 12px; } }
+@media (min-width: 900px) and (max-height: 860px) {
+  #sucursales .desktop .s80 { gap: clamp(16px, 3vh, 32px); }
+  #sucursales .desktop .s82 { margin-top: 0 !important; }
+}
+.bcard .s84 > .branch-hours, .bcard .s84 > .branch-note, .bcard .s185 > .branch-hours, .bcard .s185 > .branch-note { margin-bottom: 0 !important; }
+.bcard .branch-note { margin-top: 2px; }
+/* The photo fills its cell instead of sizing it (card height comes from the text + min-height). */
+@media (min-width: 900px) and (max-height: 860px) { #sucursales .desktop .bcard > .branch-photo { contain: size; min-height: 0; } }
+
+/* Desktop Sucursales (all heights): the pinned card looks exactly like the hover state; title swaps with a fade. */
+@media (min-width: 900px) {
+  #sucursales .desktop .bcard { cursor: pointer; }
+  #sucursales .desktop .bcard.is-pinned { transform: translateY(-6px); border-color: var(--blue) !important; box-shadow: 0 24px 50px -24px rgba(0, 102, 255, .45) !important; }
+  .branch-title-desk { display: inline-block; white-space: nowrap; }
+  .branch-title-desk.is-swapping { animation: branch-title-in .32s cubic-bezier(.2,.7,.2,1); }
+}
+/* QA: the map button never shrinks or leaves the row; the title scales so even "Villa Urquiza." fits beside it. */
+@media (min-width: 900px) {
+  #sucursales .desktop .s37 { min-width: 0; }
+  #sucursales .desktop [data-open-map] { flex-shrink: 0; white-space: nowrap; }
+  #sucursales .desktop .s37 h2 { font-size: min(3.9vw, 58px) !important; }
+}
+@media (min-width: 900px) and (max-width: 999px) { #sucursales .desktop .bcard .branch-note { display: none; } }
+#sucursales .desktop .bcard > .branch-photo { object-position: 50% 25%; }
+
+/* Desktop Sucursales: the photo is the hero (no street map); "Ver en el mapa" chip opens the branch dialog. */
+@media (min-width: 900px) {
+  #sucursales .desktop .bcard { position: relative; }
+  #sucursales .desktop .bcard > .bmap { display: none; }
+  .bcard-mapchip { position: absolute; z-index: 2; left: 10px; display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px 0 10px; border: 0; border-radius: 999px; background: rgba(255,255,255,.92); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: var(--black); font: 600 12px/1 inherit; font-family: inherit; box-shadow: 0 2px 8px rgba(0,0,0,.18); cursor: pointer; transition: background .2s ease; }
+  .bcard-mapchip:hover { background: #fff; }
+  .bcard-mapchip:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .bcard-mapchip svg { flex-shrink: 0; }
+}
+@media (min-width: 900px) and (min-height: 861px) {
+  #sucursales .desktop .bcard > .branch-photo { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 40%; }
+  #sucursales .desktop .bcard { container-type: inline-size; }
+  .bcard-mapchip { top: calc(125cqw - 42px); }
+}
+@media (min-width: 900px) and (max-height: 860px) {
+  #sucursales .desktop .bcard > .branch-photo { grid-row: 1 / span 2; height: 100%; object-fit: cover; object-position: 50% 40%; contain: size; }
+  .bcard-mapchip { bottom: 10px; }
+}
+/* Desktop branch cards: one full-width WhatsApp button; "Cómo llegar" is the chip on the photo. */
+@media (min-width: 900px) {
+  #sucursales .desktop .bcard .branch-actions { display: grid; grid-template-columns: minmax(0,1fr) !important; }
+  #sucursales .desktop .bcard .branch-actions .branch-wa { width: 100%; font-size: 15px; padding: 0 14px; white-space: nowrap; }
+  #sucursales .desktop a.bcard-mapchip { text-decoration: none; color: var(--black); }
+  /* Recoleta uses its storefront shot (shows the FixNow sign), cropped to the frame. */
+  #sucursales .desktop .bcard .branch-photo[src*="branch-recoleta"] { object-position: 60% 50%; }
+}
+/* Big screens: the tall photo shrinks with screen height so the section stays on one screen. */
+@media (min-width: 900px) and (min-height: 861px) {
+  #sucursales .desktop .bcard > .branch-photo { aspect-ratio: auto !important; height: clamp(250px, calc(100vh - 610px), 380px) !important; }
+}
+@media (min-width: 900px) and (min-height: 861px) { .s79 { padding-top: clamp(40px, 6vh, 80px); } }
+
+/* Branch photo lightbox. */
+#sucursales .branch-photo { cursor: zoom-in; }
+.photo-lightbox { max-width: min(92vw, 1100px); max-height: 92dvh; padding: 0; border: 0; border-radius: 8px; background: #111; overflow: visible; }
+.photo-lightbox::backdrop { background: rgba(10,10,10,.82); }
+.photo-lightbox img { display: block; max-width: min(92vw, 1100px); max-height: calc(92dvh - 44px); width: auto; height: auto; border-radius: 8px 8px 0 0; }
+.photo-lightbox-caption { margin: 0; padding: 12px 16px; color: #fff; font: 800 15px/1.2 "Montserrat", system-ui, sans-serif; letter-spacing: .02em; text-transform: uppercase; }
+.photo-lightbox-close { position: absolute; top: -14px; right: -14px; display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: #fff; color: #141414; box-shadow: 0 4px 14px rgba(0,0,0,.35); cursor: pointer; }
+.photo-lightbox[open] { animation: map-in .28s cubic-bezier(.2,.7,.2,1); }
+.photo-lightbox[open]::backdrop { animation: map-backdrop-in .28s ease; }
+.photo-lightbox.is-closing { animation: map-out .18s ease-in forwards; }
+.photo-lightbox.is-closing::backdrop { animation: map-backdrop-out .18s ease-in forwards; }
+body:has(.photo-lightbox[open]) .whatsapp-float { display: none; }
+@media (max-width: 899px) { .photo-lightbox-close { top: 8px; right: 8px; } }
+@media (prefers-reduced-motion: reduce) { .photo-lightbox[open], .photo-lightbox[open]::backdrop, .photo-lightbox.is-closing, .photo-lightbox.is-closing::backdrop { animation: none; } }
+/* Villa Urquiza and Villa Crespo: keep the FixNow sign at the top of the photo in view. */
+#sucursales .bcard .branch-photo[src*="branch-villa-urquiza"],
+#sucursales .bcard .branch-photo[src*="branch-villa-crespo"] { object-position: 50% 0% !important; }
+/* Chip follows the (screen-height-based) photo height in the 4-column layout. */
+@media (min-width: 900px) and (min-height: 861px) {
+  #sucursales .desktop .bcard .bcard-mapchip { top: calc(clamp(250px, calc(100vh - 610px), 380px) - 42px) !important; bottom: auto !important; }
+}
+@media (min-width: 900px) and (max-width: 1199px) and (max-height: 860px) { #sucursales .desktop .bcard { grid-template-columns: 190px minmax(0,1fr) !important; } }
+/* "Cómo llegar" chip: site font, frosted dark glass so the photo still shows through. */
+#sucursales .bcard .bcard-mapchip, #sucursales .desktop a.bcard-mapchip {
+  font-family: "Montserrat", system-ui, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .01em;
+  color: #fff !important; background: rgba(20,20,20,.42) !important;
+  border: 1px solid rgba(255,255,255,.28); box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  -webkit-backdrop-filter: blur(10px) saturate(140%); backdrop-filter: blur(10px) saturate(140%);
+  height: 34px; padding: 0 14px 0 11px; gap: 6px;
+  transition: background .2s ease, border-color .2s ease;
+}
+#sucursales .bcard .bcard-mapchip:hover { background: rgba(20,20,20,.62) !important; border-color: rgba(255,255,255,.45); }
+#sucursales .bcard .bcard-mapchip svg { stroke: #fff; }
+#sucursales .bcard .bcard-mapchip, #sucursales .desktop a.bcard-mapchip { background: rgba(20,20,20,.26) !important; text-shadow: 0 1px 2px rgba(0,0,0,.35); }
+#sucursales .bcard .bcard-mapchip:hover { background: rgba(20,20,20,.42) !important; }
+#sucursales .bcard .bcard-mapchip, #sucursales .desktop a.bcard-mapchip { background: rgba(20,20,20,.08) !important; border-color: rgba(255,255,255,.4); -webkit-backdrop-filter: blur(6px) saturate(130%); backdrop-filter: blur(6px) saturate(130%); text-shadow: 0 1px 3px rgba(0,0,0,.6); }
+#sucursales .bcard .bcard-mapchip svg { filter: drop-shadow(0 1px 2px rgba(0,0,0,.5)); }
+#sucursales .bcard .bcard-mapchip:hover { background: rgba(20,20,20,.25) !important; }
+/* Map dialog: all branch details share one cell, so the panel is always as tall as the tallest
+   branch (Villa Urquiza's longer hours) and switching branches never moves the layout. */
+.bm-details { display: grid; }
+.bm-details > .bm-detail { grid-area: 1 / 1; }
+.bm-details > .bm-detail[hidden] { display: block !important; visibility: hidden; pointer-events: none; }
+.bm-details > .bm-detail .bm-actions { align-self: end; }
+.bm-detail { display: flex; flex-direction: column; }
+.bm-detail .bm-actions { margin-top: auto; padding-top: 14px; }
+.bm-actions a { white-space: nowrap; }
+@media (max-width: 380px) { .bm-actions a { font-size: 14px; gap: 6px; padding: 0 8px; } }
+/* Map dialog fixes: actions always full width; on phones no title bar, map to the top, floating close button. */
+.bm-details > .bm-detail .bm-actions { align-self: stretch; width: 100%; }
+@media (max-width: 899px) {
+  .branch-map .bm-head { position: absolute; top: 0; right: 0; left: auto; z-index: 6; min-height: 0; padding: calc(10px + env(safe-area-inset-top)) 10px 0 0; border: 0; background: none; }
+  .branch-map .bm-head h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .branch-map .bm-close { width: 44px; height: 44px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 4px 14px rgba(0,0,0,.25); }
+}
+.branch-map.is-brand-map .bm-mapwrap, .branch-map.is-brand-map .bm-stage { background: #0B5CE6; }
+.branch-map.is-brand-map .bm-pin-dot { background: #fff; color: var(--blue); border-color: #fff; box-shadow: 0 0 0 8px rgba(255,255,255,.22), 0 4px 10px rgba(0,0,0,.25); }
+.branch-map.is-brand-map .bm-pin[aria-pressed="true"] .bm-pin-dot { background: #141414; color: #fff; }
+.branch-map.is-paper-map .bm-mapwrap, .branch-map.is-paper-map .bm-stage { background: #F5F1E8; }
+.branch-map.is-ink-map .bm-mapwrap, .branch-map.is-ink-map .bm-stage { background: #FFFFFF; }
+.branch-map.is-illustrated-map .bm-mapwrap, .branch-map.is-illustrated-map .bm-stage { background: #F3F6FB; }

@@ -408,10 +408,95 @@ if (branchSnap) {
 }
 
 
+// Desktop Sucursales: hovering a branch card shows its name in the title; clicking one (buttons included) keeps it.
+(() => {
+  const title = document.querySelector('.branch-title-desk');
+  const cards = [...document.querySelectorAll('#sucursales .desktop .bcard')];
+  if (!title || !cards.length) return;
+  const fallback = title.textContent;
+  let pinned = null;
+  const nameOf = card => card.querySelector('h3').textContent.trim();
+  const show = text => {
+    if (title.textContent === text) return;
+    title.textContent = text;
+    title.classList.remove('is-swapping'); void title.offsetWidth; title.classList.add('is-swapping');
+  };
+  const rest = () => show(pinned ? nameOf(pinned) + '.' : fallback);
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => show(nameOf(card) + '.'));
+    card.addEventListener('mouseleave', rest);
+    card.addEventListener('click', e => {
+      if (e.target.closest('.bcard-mapchip, .branch-photo')) return;
+      pinned = pinned === card && !e.target.closest('a') ? null : card;
+      cards.forEach(c => c.classList.toggle('is-pinned', c === pinned));
+      rest();
+    });
+  });
+})();
+
+// Branch photos open full size in a lightbox (✕, a click outside or Escape closes it).
+(() => {
+  const photos = document.querySelectorAll('#sucursales .branch-photo');
+  if (!photos.length || !window.HTMLDialogElement) return;
+  const box = document.createElement('dialog');
+  box.className = 'photo-lightbox';
+  box.setAttribute('aria-label', 'Foto de la sucursal');
+  box.innerHTML = '<button class="photo-lightbox-close" type="button" aria-label="Cerrar foto"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><img alt=""><p class="photo-lightbox-caption"></p>';
+  document.body.append(box);
+  const img = box.querySelector('img'), caption = box.querySelector('.photo-lightbox-caption');
+  const close = () => {
+    if (!box.open || box.classList.contains('is-closing')) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { box.close(); return; }
+    box.classList.add('is-closing');
+    setTimeout(() => { box.classList.remove('is-closing'); box.close(); }, 180);
+  };
+  photos.forEach(photo => {
+    photo.setAttribute('role', 'button');
+    photo.setAttribute('tabindex', '0');
+    const open = () => {
+      img.src = photo.currentSrc || photo.src;
+      img.alt = photo.alt;
+      caption.textContent = photo.closest('.bcard')?.querySelector('h3')?.textContent.trim() || '';
+      box.showModal();
+    };
+    photo.addEventListener('click', open);
+    photo.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  });
+  box.querySelector('.photo-lightbox-close').addEventListener('click', close);
+  box.addEventListener('click', e => { if (e.target === box) close(); });
+  box.addEventListener('cancel', e => { e.preventDefault(); close(); });
+})();
+
 // "Ver todas en el mapa": overview of the four branches in a modal dialog.
 const branchMap = document.getElementById('branch-map');
 if (branchMap && branchMap.showModal) {
-  document.querySelectorAll('[data-open-map]').forEach(button => button.addEventListener('click', () => { const overview = branchMap.querySelector('img[data-src]'); if (overview && !overview.hasAttribute('src')) overview.src = overview.dataset.src; branchMap.showModal(); }));
+  // One branch is selected at a time: its pin, its row and its details (hours, WhatsApp, Cómo llegar).
+  const mapWrap = branchMap.querySelector('.bm-mapwrap');
+  const mapStage = branchMap.querySelector('.bm-stage');
+  const pick = (index, {center = true, smooth = true} = {}) => {
+    branchMap.querySelectorAll('.bm-pin, .bm-item').forEach(el => el.setAttribute('aria-pressed', String(Number(el.dataset.branch) === index)));
+    branchMap.querySelectorAll('.bm-detail').forEach(el => { el.hidden = Number(el.dataset.branch) !== index; });
+    // On phones the map is wider than the screen: slide it so the chosen pin sits in the middle.
+    const pin = branchMap.querySelector(`.bm-pin[data-branch="${index}"]`);
+    if (center && pin && mapWrap.scrollWidth > mapWrap.clientWidth) {
+      const left = mapStage.offsetWidth * parseFloat(pin.style.left) / 100 - mapWrap.clientWidth / 2;
+      mapWrap.scrollTo({left: Math.max(0, left), behavior: smooth && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto'});
+    }
+  };
+  branchMap.querySelectorAll('.bm-pin, .bm-item').forEach(el => el.addEventListener('click', () => pick(Number(el.dataset.branch))));
+  document.querySelectorAll('[data-open-map]').forEach(button => button.addEventListener('click', event => {
+    const overview = branchMap.querySelector('img[data-src]');
+    // Preview of map styles: ?map=brand | paper | ink (temporary, for choosing a style).
+    const style = new URLSearchParams(location.search).get('map');
+    const pick = (style && overview?.dataset[style + 'Src']) || overview?.dataset.src;
+    if (overview && overview.getAttribute('src') !== pick) overview.src = pick;
+    ['brand', 'paper', 'ink', 'illustrated'].forEach(name => branchMap.classList.toggle('is-' + name + '-map', style === name));
+    branchMap.showModal();
+    // Start on the branch the visitor was looking at in Sucursales (phones), otherwise the first one.
+    const chosen = event.currentTarget.dataset.branch;
+    const current = chosen !== undefined ? Number(chosen) : Number(document.querySelector('[data-branch-dot][aria-pressed="true"]')?.dataset.branchDot || 0);
+    requestAnimationFrame(() => pick(current, {smooth: false}));
+  }));
   // Fade and lift the dialog out before it actually closes.
   const closeMap = () => {
     if (!branchMap.open || branchMap.classList.contains('is-closing')) return;
