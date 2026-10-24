@@ -3762,7 +3762,7 @@ body:has(.branch-map[open]) .whatsapp-float { display: none; }
 /* 1–3 Desktop grids: no lonely last item; step titles reserve two lines so descriptions start level. */
 @media (min-width: 900px) and (max-width: 1199px) { #proceso .desktop .s61 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
 @media (min-width: 1200px) { #proceso .desktop .s61 { grid-template-columns: repeat(4, minmax(0,1fr)); } }
-@media (min-width: 900px) { .desktop .s66 { grid-template-columns: repeat(3, minmax(0,1fr)); } .desktop .s63 { min-height: 2.04em; } }
+@media (min-width: 900px) { .desktop .s66 { grid-template-columns: repeat(3, minmax(0,1fr)); } }
 /* 4–5 One 16px phone gutter everywhere; tablet hero copy starts on the gutter, not centred. */
 @media (max-width: 899px) {
   .hero-copy { padding-left: 16px; padding-right: 16px; max-width: none; }
@@ -4037,4 +4037,176 @@ body:has(.photo-lightbox[open]) .whatsapp-float { display: none; }
 @media (max-width: 899px) {
   .branch-map .bm-live { bottom: 16px; }
   .branch-map .bm-live .maplibregl-ctrl-top-left { top: calc(8px + env(safe-area-inset-top)); }
+}
+
+/* Map dialog: loading state, live map fade-in, and no focus ring on open. */
+.branch-map:focus { outline: none; }
+.branch-map .bm-close:focus:not(:focus-visible) { outline: none; box-shadow: 0 4px 14px rgba(0,0,0,.25); }
+.bm-loading { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  background: linear-gradient(110deg, #eef1f5 30%, #f7f9fc 50%, #eef1f5 70%) 0 0 / 300% 100%; animation: bm-shimmer 1.4s linear infinite; transition: opacity .4s ease; }
+.branch-map.has-live-map .bm-loading { opacity: 0; pointer-events: none; }
+.bm-loading-pin { width: 22px; height: 22px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 0 rgba(0,102,255,.45); animation: bm-pulse 1.3s ease-out infinite; }
+.bm-loading-text { font: 600 13px "Montserrat", system-ui, sans-serif; letter-spacing: .04em; color: #5b6472; }
+.branch-map .bm-live { opacity: 0; transition: opacity .45s ease; }
+.branch-map.has-live-map .bm-live { opacity: 1; }
+@keyframes bm-shimmer { to { background-position: -300% 0; } }
+@keyframes bm-pulse { 0% { box-shadow: 0 0 0 0 rgba(0,102,255,.45); transform: scale(.9); } 70% { box-shadow: 0 0 0 18px rgba(0,102,255,0); transform: scale(1); } 100% { box-shadow: 0 0 0 0 rgba(0,102,255,0); transform: scale(.9); } }
+@media (max-width: 899px) { .bm-loading { bottom: 16px; } }
+@media (prefers-reduced-motion: reduce) { .bm-loading, .bm-loading-pin { animation: none; } .branch-map .bm-live { transition: none; } }
+
+/* "4 pasos" (desktop): label, title and text of every step share rows, so descriptions line up
+   only as far down as the tallest title in that row actually needs (no reserved empty line). */
+@media (min-width: 900px) {
+  #proceso .desktop .s61 { grid-auto-rows: auto; }
+  #proceso .desktop .s62 { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 10px; align-content: start; }
+  #proceso .desktop .s62 > * { margin: 0; }
+}
+
+/* ============ Short laptop screens (desktop layout, 640px tall or less) ============
+   e.g. a MacBook with browser zoom, or a small laptop window. Everything scales with height. */
+@media (min-width: 900px) and (max-height: 640px) {
+  .s57, .s65, .s69, .s79, .s94, .diagnostic-section, .faq-section { padding-top: clamp(22px, 5vh, 60px) !important; padding-bottom: clamp(22px, 5vh, 60px) !important; }
+  .s108 { padding-top: clamp(22px, 5vh, 60px); padding-bottom: clamp(22px, 5vh, 60px); }
+  .specialist-section { padding-top: 22px; padding-bottom: 22px; }
+  .desktop .h2, .faq-section h2, #accesorios .desktop .h2, .desktop .reviews-title, .diagnostic-intro h2 { font-size: clamp(32px, min(5.8vw, 8.2vh), 84px) !important; }
+  .desktop .s37 { gap: 8px; }
+  .desktop .mono.s12, .desktop .s60, .faq-section .mono { font-size: 11px; }
+  /* Hero */
+  .hero-copy { padding-top: calc(var(--header-h, 69px) + 10px); padding-bottom: 14px; }
+  .hero-eyebrow { margin-bottom: 8px; }
+  .real-hero h1 { font-size: clamp(32px, min(5.8vw, 9.5vh), 84px) !important; }
+  .hero-description { margin-top: 8px; font-size: 15px; line-height: 1.45; }
+  .hero-actions { margin-top: 12px; }
+  .hero-cta { min-height: 44px; padding: 10px 16px; font-size: 14px; }
+  .hero-cash { margin-top: 10px; font-size: 13px; line-height: 1.45; }
+  .hero-proof > * { padding-top: 10px; padding-bottom: 10px; gap: 4px; }
+  .hero-proof strong { font-size: clamp(24px, 5.6vh, 44px); }
+  .hero-proof span.mono { font-size: 11px; }
+  /* Reparaciones */
+  .diagnostic-intro { margin-bottom: 16px; }
+  .diagnostic-controls { display: grid !important; grid-template-columns: 1fr 1fr; align-content: start; }
+  .desktop .issue { min-height: 0; padding: 12px 14px; }
+  .diagnostic-panel .phone-exploded { max-width: calc((100vh - 190px) / 1.1); margin-inline: auto; }
+  .diagnostic-detail { gap: 10px; }
+  .diagnostic-detail h3 { font-size: clamp(24px, 5vh, 40px) !important; }
+  /* 4 pasos */
+  #proceso .desktop .s61 { margin-top: 18px; }
+  #proceso .desktop .s62 { padding-top: 14px; padding-bottom: 14px; row-gap: 6px; }
+  #proceso .desktop .s63 { font-size: clamp(20px, 4.4vh, 34px); }
+  #proceso .desktop .s64 { font-size: 14px; }
+  /* ¿Por qué? */
+  .desktop .why { padding: 18px 22px; }
+  /* Reseñas */
+  .desktop .s70 { margin-bottom: 14px !important; }
+  .desktop .s72 { font-size: clamp(34px, 6vh, 72px) !important; }
+  .desktop .rcard { padding: 16px 20px; gap: 10px; }
+  .desktop .s78 { font-size: 15px; }
+  /* Sucursales */
+  #sucursales .desktop .bcard { min-height: clamp(150px, 26vh, 260px); }
+  #sucursales .desktop .bcard > .s84 { padding: 10px 16px; }
+  #sucursales .desktop .bcard h3 { font-size: clamp(20px, 4.2vh, 32px) !important; }
+  #sucursales .desktop .bcard .branch-actions a { min-height: 40px; }
+  /* FAQ */
+  .faq-section h2 { margin: 8px 0 16px; }
+  .faq-list summary { padding-top: 12px; padding-bottom: 12px; font-size: 15px; }
+  .faq-list summary::after { top: 50%; }
+  /* Closing + footer */
+  #contacto .desktop .s110 { font-size: clamp(48px, min(9vw, 14vh), 136px) !important; }
+  .s114 { padding-top: 24px; padding-bottom: 24px; }
+  .foot-bottom { margin-top: 16px; }
+}
+
+/* Reparaciones on laptop heights (desktop, up to 940px tall): two-column repair buttons and a
+   3D phone sized from the screen height, so selector, phone and details fit one screen. */
+@media (min-width: 900px) and (max-height: 940px) {
+  .diagnostic-section { padding-top: clamp(24px, 5vh, 100px) !important; padding-bottom: clamp(24px, 5vh, 100px) !important; }
+  .diagnostic-intro { margin-bottom: clamp(14px, 2.5vh, 48px); }
+  .diagnostic-controls { display: grid !important; grid-template-columns: 1fr 1fr; align-content: start; }
+  .desktop .issue { min-height: 0; padding: clamp(10px, 1.8vh, 20px) 14px; }
+  .diagnostic-panel { align-items: start; }
+  .diagnostic-panel .phone-exploded { max-width: calc((100vh - 69px - 10vh - 90px) / 1.1); margin-inline: auto; }
+  .diagnostic-detail { gap: clamp(6px, 1.2vh, 16px); padding-top: clamp(14px, 2.5vh, 32px); padding-bottom: clamp(14px, 2.5vh, 32px); }
+  .diagnostic-detail h3 { font-size: clamp(24px, 4.6vh, 44px) !important; }
+}
+@media (min-width: 900px) and (max-height: 940px) {
+  .diagnostic-panel { padding-top: clamp(12px, 2.6vh, 28px) !important; padding-bottom: clamp(12px, 2.6vh, 28px) !important; }
+  .diagnostic-panel { align-items: center !important; }
+}
+/* The warranty small print is also in the FAQ; on short laptop screens it gives way to the phone. */
+@media (min-width: 900px) and (max-height: 760px) { .diagnostic-detail .service-conditions { display: none; } }
+@media (min-width: 900px) and (max-height: 940px) {
+  #diagnostico .diagnostic-controls .issue { min-height: 0 !important; height: auto; padding: clamp(10px, 1.8vh, 18px) 14px; }
+  .diagnostic-controls { grid-auto-rows: min-content; }
+  .diagnostic-panel .phone-exploded { max-width: calc((100vh - 69px - 10vh - 150px) / 1.1) !important; }
+}
+/* Laptop heights: the six repairs become one row of tabs above the phone + details. */
+@media (min-width: 900px) and (max-height: 940px) {
+  .diagnostic-layout { grid-template-columns: minmax(0,1fr) !important; }
+  .diagnostic-controls { grid-template-columns: repeat(6, minmax(0,1fr)) !important; border-right: 0 !important; border-bottom: 1px solid var(--grey); }
+  #diagnostico .diagnostic-controls .issue { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; padding: clamp(8px, 1.6vh, 16px) 14px; border-right: 1px solid var(--grey); border-bottom: 0; }
+  #diagnostico .diagnostic-controls .issue:last-child { border-right: 0; }
+  #diagnostico .diagnostic-controls .issue .ar { display: none; }
+  #diagnostico .diagnostic-controls .issue .t { font-size: clamp(13px, 1.1vw, 16px); line-height: 1.15; }
+  .diagnostic-intro h2 { white-space: nowrap; }
+  .diagnostic-panel .phone-exploded { max-width: calc((100vh - 69px - 10vh - 215px) / 1.1) !important; }
+}
+/* Once the live map starts, the map area no longer scrolls sideways (that was for the static map). */
+.branch-map.is-map-loading .bm-mapwrap, .branch-map.has-live-map .bm-mapwrap { overflow: hidden; }
+.branch-map.is-map-loading .bm-stage { visibility: hidden; }
+@media (min-width: 900px) and (max-height: 940px) {
+  .diagnostic-panel .phone-exploded { max-width: calc((100vh - 69px - 10vh - 240px) / 1.1) !important; }
+}
+@media (min-width: 900px) and (max-width: 1180px) and (max-height: 940px) {
+  .diagnostic-intro { align-items: flex-end; }
+  .diagnostic-intro > p, .diagnostic-intro .diagnostic-desktop-copy { display: none; }
+}
+
+/* ============ Very short desktop viewports (up to 600px tall, e.g. a laptop with browser zoom) ============ */
+@media (min-width: 900px) and (max-height: 600px) {
+  /* 4 pasos: always one row of four */
+  #proceso .desktop .s61 { grid-template-columns: repeat(4, minmax(0,1fr)) !important; column-gap: 20px; }
+  #proceso .desktop .s63 { font-size: clamp(18px, 2.1vw, 30px); }
+  #proceso .desktop .s64 { font-size: 13px; line-height: 1.45; }
+  /* Reparaciones: timing and warranty side by side, smaller replay button */
+  .service-description .s52 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; }
+  .service-description .s52 > * { flex-direction: column; align-items: flex-start; gap: 2px; padding-top: 8px; padding-bottom: 8px; }
+  .diagnostic-detail .repair-replay { min-height: 34px; padding-top: 4px; padding-bottom: 4px; }
+  .diagnostic-detail .s51 { font-size: 14px; }
+  .diagnostic-panel .phone-exploded { max-width: calc((100vh - 69px - 10vh - 175px) / 1.1) !important; }
+  /* Accesorios: copy and tiles side by side */
+  #accesorios .desktop .s95 { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 32px; }
+  #accesorios .desktop .s96 { gap: 12px; }
+  #accesorios .desktop .s97 { font-size: 15px; }
+  #accesorios .desktop .acc-tile { padding: 16px 14px; gap: 10px; }
+  #accesorios .desktop .acc-tile b { font-size: 14px; }
+  #accesorios .desktop .acc-features { padding-top: 10px; padding-bottom: 10px; }
+  #accesorios .desktop .acc-cta { min-height: 46px; }
+  /* Sucursales: even card rows sized from the height */
+  #sucursales .desktop .s82 { gap: 10px; margin-top: 12px; }
+  #sucursales .desktop .bcard { min-height: 0 !important; grid-template-columns: clamp(110px, 13vw, 200px) minmax(0,1fr) !important; }
+  #sucursales .desktop .bcard > .s84 { padding: 10px 14px !important; gap: 2px; }
+  #sucursales .desktop .bcard h3 { font-size: clamp(18px, 3.8vh, 24px) !important; }
+  #sucursales .desktop .bcard .s86 { font-size: 13px; }
+  #sucursales .desktop .bcard .branch-hours { font-size: 12px; }
+  #sucursales .desktop .bcard .branch-note { display: none; }
+  #sucursales .desktop .bcard .branch-actions { grid-template-columns: minmax(0,1fr) minmax(0,1fr) !important; padding-top: 6px !important; gap: 6px; }
+  #sucursales .desktop .bcard .branch-actions a { min-height: 38px !important; font-size: 12.5px !important; padding: 0 8px !important; }
+  #sucursales .desktop .s36 .btn { min-height: 46px; }
+}
+@media (min-width: 900px) and (max-height: 600px) {
+  .diagnostic-panel { position: relative; }
+  .diagnostic-detail > .mono.accent, .diagnostic-detail .service-description > .mono.accent { display: none; }
+  .diagnostic-detail .repair-replay { position: absolute; left: 12px; bottom: 12px; z-index: 2; background: rgba(255,255,255,.9); }
+  .diagnostic-panel .phone-exploded .phone-note { display: none; }
+  #sucursales .desktop .bcard .branch-actions { grid-template-columns: minmax(0,1fr) !important; }
+  #sucursales .desktop .bcard-mapchip { padding: 0; width: 34px; justify-content: center; font-size: 0; gap: 0; }
+}
+@media (min-width: 900px) and (max-height: 600px) {
+  .diagnostic-section { padding-top: clamp(16px, 3.6vh, 24px) !important; padding-bottom: clamp(16px, 3.6vh, 24px) !important; }
+  .diagnostic-intro { margin-bottom: 10px; }
+}
+@media (min-width: 900px) and (max-height: 600px) {
+  #sucursales .desktop .bcard .bcard-mapchip { width: 34px !important; height: 34px; padding: 0 !important; justify-content: center; font-size: 0 !important; gap: 0 !important; }
+  #sucursales .desktop .bcard .bcard-mapchip svg { width: 16px; height: 16px; }
+  #accesorios .desktop .acc-tile b { font-size: clamp(11px, 1.2vw, 15px) !important; letter-spacing: 0; overflow-wrap: normal; word-break: keep-all; hyphens: none; }
 }

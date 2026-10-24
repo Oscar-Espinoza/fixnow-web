@@ -482,7 +482,7 @@ if (branchMap && branchMap.showModal) {
     if (liveMap) { if (center) liveMap.focus(index, {animate: smooth && !matchMedia('(prefers-reduced-motion: reduce)').matches}); return; }
     // Static fallback: on phones the picture is wider than the screen, so slide the chosen pin to the middle.
     const pin = mapStage.querySelector(`.bm-pin[data-branch="${index}"]`);
-    if (center && pin && mapWrap.scrollWidth > mapWrap.clientWidth) {
+    if (center && pin && !liveLoading && mapWrap.scrollWidth > mapWrap.clientWidth) {
       const left = mapStage.offsetWidth * parseFloat(pin.style.left) / 100 - mapWrap.clientWidth / 2;
       mapWrap.scrollTo({left: Math.max(0, left), behavior: smooth && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto'});
     }
@@ -496,24 +496,45 @@ if (branchMap && branchMap.showModal) {
       return {name, lngLat: [node.geo.longitude, node.geo.latitude]};
     });
   };
+  // The map code (~280KB) starts downloading when Sucursales comes near, so the dialog opens faster.
+  let mapModule = null;
+  const loadMapModule = () => (mapModule ||= import('./assets/branch-map.js?v=20261015181305'));
+  const sucursales = document.getElementById('sucursales');
+  if (sucursales && 'IntersectionObserver' in window && !navigator.connection?.saveData) {
+    const prefetch = new IntersectionObserver(entries => {
+      if (entries.some(e => e.isIntersecting)) { prefetch.disconnect(); loadMapModule().catch(() => { mapModule = null; }); }
+    }, {rootMargin: '600px 0px'});
+    prefetch.observe(sucursales);
+  }
   const startLiveMap = index => {
     if (liveLoading) return liveLoading;
     const host = document.createElement('div');
     host.className = 'bm-live';
     mapWrap.append(host);
+    // Loading state over the map area until the live map has drawn.
+    const loading = document.createElement('div');
+    loading.className = 'bm-loading';
+    loading.setAttribute('aria-hidden', 'true');
+    loading.innerHTML = '<span class="bm-loading-pin"></span><span class="bm-loading-text">Cargando mapa…</span>';
+    mapWrap.append(loading);
+    // The static map scrolls sideways on phones; the live map and loader need it back at the start.
+    mapWrap.scrollLeft = 0;
+    branchMap.classList.add('is-map-loading');
     const phone = matchMedia('(max-width: 899px)').matches;
-    liveLoading = import('./assets/branch-map.js?v=20261015181305').then(({mountBranchMap}) => {
+    liveLoading = loadMapModule().then(({mountBranchMap}) => {
       const map = mountBranchMap(host, branchPoints(), {initial: index, bottomPadding: phone ? 30 : 0, onPick: i => pick(i)});
       return map.ready.then(() => {
         liveMap = map;
         branchMap.classList.add('has-live-map');
+        branchMap.classList.remove('is-map-loading');
+        setTimeout(() => loading.remove(), 500);
         const current = Number(branchMap.querySelector('.bm-item[aria-pressed="true"]')?.dataset.branch || index);
         map.resize();
         // First view: all four branches; picking one then slides to it.
         pick(current, {center: false});
         map.overview();
       });
-    }).catch(() => { host.remove(); liveLoading = null; });
+    }).catch(() => { host.remove(); loading.remove(); branchMap.classList.remove('is-map-loading'); liveLoading = null; });
     return liveLoading;
   };
   branchMap.querySelectorAll('.bm-pin, .bm-item').forEach(el => el.addEventListener('click', () => pick(Number(el.dataset.branch))));
@@ -521,13 +542,13 @@ if (branchMap && branchMap.showModal) {
     const overview = branchMap.querySelector('img[data-src]');
     if (overview && !overview.hasAttribute('src')) overview.src = overview.dataset.src;
     branchMap.showModal();
+    // Focus the dialog itself (not the close button), so no focus ring shows on open.
+    branchMap.focus({preventScroll: true});
     // Start on the branch the visitor was looking at in Sucursales (phones), otherwise the first one.
     const chosen = event.currentTarget.dataset.branch;
     const current = chosen !== undefined ? Number(chosen) : Number(document.querySelector('[data-branch-dot][aria-pressed="true"]')?.dataset.branchDot || 0);
-    requestAnimationFrame(() => {
-      if (liveMap) { pick(current, {center: false}); liveMap.resize(); liveMap.overview(); }
-      else { pick(current, {smooth: false}); startLiveMap(current); }
-    });
+    if (!liveMap) { pick(current, {smooth: false}); startLiveMap(current); }
+    else requestAnimationFrame(() => { pick(current, {center: false}); liveMap.resize(); liveMap.overview(); });
   }));
   // Fade and lift the dialog out before it actually closes.
   const closeMap = () => {

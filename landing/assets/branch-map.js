@@ -51,11 +51,13 @@ export function mountBranchMap(container, branches, {onPick, initial = 0, bottom
     el.addEventListener('click', e => { e.stopPropagation(); onPick?.(i); });
     return new maplibregl.Marker({element: el, anchor: 'top', offset: [0, -23]}).setLngLat(branch.lngLat).addTo(map);
   });
+  // Ready once the branded map has fully drawn (first "idle"), so the loader never reveals blank tiles.
   const ready = new Promise(resolve => map.once('load', () => {
     brand(map);
     // Keep the map credits collapsed to the small (i) button so they don't cover the map on phones.
     container.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show');
-    resolve();
+    map.resize();
+    map.once('idle', resolve);
   }));
   const all = () => {
     const bounds = new maplibregl.LngLatBounds();
