@@ -16,5 +16,4 @@ Main WhatsApp (Belgrano): 5491156327284. Branch numbers, addresses and hours app
 `pnpm install && node tools/build.mjs --site https://fixnow.com.ar && node tools/build.mjs --site https://mediumpurple-pig-827825.hostingersite.com --staging && node tools/check-build.mjs` must pass. If you intentionally change a fact that `tools/check-build.mjs` asserts (hours, links, labels), update that assertion too.
 
 ## Deploy
-Every push to `main` builds and uploads to the staging site automatically (GitHub Actions, `.github/workflows/deploy.yml`).
-Production is a manual run: Actions → "Build and deploy" → Run workflow → target `production`.
+Every push to `main` goes live: GitHub Actions (`.github/workflows/deploy.yml`) builds the production package (`dist/`, https://fixnow.com.ar) and uploads it over FTP to the Hostinger website that serves fixnow.com.ar (formerly the mediumpurple-pig staging site; there is no separate staging anymore). `dist-staging/` is still built for the local board and the check script.

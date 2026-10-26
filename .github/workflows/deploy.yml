@@ -1,13 +1,10 @@
 name: Build and deploy
 
+# Every push to main deploys the production build (https://fixnow.com.ar) to the Hostinger site.
 on:
   push:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      target:
-        description: "staging or production"
-        default: staging
 
 concurrency: deploy
 
@@ -21,19 +18,18 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 24, cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - name: Build and check both packages
+      - name: Build and check
         run: |
           node tools/build.mjs --site https://fixnow.com.ar
           node tools/build.mjs --site https://mediumpurple-pig-827825.hostingersite.com --staging
           node tools/check-build.mjs
-          if [ "${{ inputs.target }}" = "production" ]; then echo "OUT=dist" >> $GITHUB_ENV; else echo "OUT=dist-staging" >> $GITHUB_ENV; fi
       - name: Upload over FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ inputs.target == 'production' && secrets.FTP_SERVER_PRODUCTION || secrets.FTP_SERVER }}
-          username: ${{ inputs.target == 'production' && secrets.FTP_USERNAME_PRODUCTION || secrets.FTP_USERNAME }}
-          password: ${{ inputs.target == 'production' && secrets.FTP_PASSWORD_PRODUCTION || secrets.FTP_PASSWORD }}
-          local-dir: ./${{ env.OUT }}/
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
           server-dir: ./
           exclude: |
             BUILD-REPORT.txt
