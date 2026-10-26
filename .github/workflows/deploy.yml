@@ -25,10 +25,18 @@ jobs:
           node tools/build.mjs --site https://fixnow.com.ar
           node tools/build.mjs --site https://mediumpurple-pig-827825.hostingersite.com --staging
           node tools/check-build.mjs
+      # hPanel shows the host as "ftp://<ip>"; accept it with or without the scheme.
+      - name: Normalize FTP host
+        env:
+          SERVER: ${{ secrets.FTP_SERVER }}
+        run: |
+          host="${SERVER#ftp://}"; host="${host#ftps://}"; host="${host%%/*}"; host="$(echo "$host" | tr -d '[:space:]')"
+          echo "::add-mask::$host"
+          echo "FTP_HOST=$host" >> "$GITHUB_ENV"
       - name: Upload over FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: ${{ env.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
