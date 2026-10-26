@@ -11,6 +11,8 @@ concurrency: deploy
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # FTP_SERVER / FTP_USERNAME / FTP_PASSWORD live in the "production" environment's secrets.
+    environment: production
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
