@@ -8,6 +8,11 @@ ErrorDocument 404 /404.html
   RewriteCond %{HTTPS} !=on [OR]
   RewriteCond https://%{HTTP_HOST} !={{SITE_URL}} [NC]
   RewriteRule ^ {{SITE_URL}}%{REQUEST_URI} [R=301,L]
+  # Clean URLs used by Google Ads: /contacto and /nosotros (with or without trailing slash or .html)
+  RewriteCond %{THE_REQUEST} \s/+(contacto|nosotros)\.html[?\s] [NC]
+  RewriteRule ^ {{SITE_URL}}/%1 [R=301,L]
+  RewriteRule ^contacto/?$ contacto.html [NC,L]
+  RewriteRule ^nosotros/?$ nosotros.html [NC,L]
 </IfModule>
 <IfModule mod_mime.c>
   AddType text/javascript .js .mjs

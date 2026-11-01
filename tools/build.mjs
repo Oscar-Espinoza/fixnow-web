@@ -11,7 +11,7 @@ if(site.protocol!=='https:'||site.pathname!=='/'||site.search||site.hash||site.u
 const SITE_URL=site.origin,staging=args.includes('--staging');
 const out=arg('--out')===undefined||!args.includes('--out')?(staging?'dist-staging':'dist'):arg('--out');
 if(!['dist','dist-staging'].includes(out))throw new Error('Output must be dist or dist-staging');
-const entries=['index.html','privacidad.html','404.html','robots.txt','sitemap.xml','.htaccess','THREE-LICENSE.txt','FONT-LICENSE.txt'];
+const entries=['index.html','contacto.html','nosotros.html','privacidad.html','404.html','robots.txt','sitemap.xml','.htaccess','THREE-LICENSE.txt','FONT-LICENSE.txt'];
 const graph=await scan('landing',entries);
 const bundle=await build({entryPoints:['landing/assets/phone3d.js'],bundle:true,minify:true,format:'esm',target:'es2022',write:false,legalComments:'inline'});
 graph.set('assets/phone3d.js',Buffer.from(bundle.outputFiles[0].text));
