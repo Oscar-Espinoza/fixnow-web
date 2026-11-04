@@ -15,7 +15,12 @@ for(const [dir,site,staging]of [['dist','https://fixnow.com.ar',false],['dist-st
   }
  }
  const index=await readFile(dir+'/index.html','utf8'),privacy=await readFile(dir+'/privacidad.html','utf8'),htaccess=await readFile(dir+'/.htaccess','utf8'),robots=await readFile(dir+'/robots.txt','utf8');
- assert.match(index,/<title>Servicio técnico iPhone en CABA \| FixNow<\/title>/);
+ assert.match(index,/<title>Reparación de celulares en CABA \| FixNow<\/title>/);
+ // Google Ads policy: pages stay brand-neutral and avoid technical-support wording.
+ for(const page of ['index.html','contacto.html','nosotros.html','privacidad.html','404.html']){
+  const html=(await readFile(dir+'/'+page,'utf8')).replace(/apple-touch-icon[^"']*/g,'');
+  assert.ok(!/iphone|ipad|apple|macbook|pro max|servicio t[eé]cnico|asistencia t[eé]cnica|soporte t[eé]cnico/i.test(html),page+' has brand or tech-support wording');
+ }
  const graph=JSON.parse(index.match(/<script type="application\/ld\+json">([^<]+)<\/script>/)[1]);assert.equal(graph['@graph'].length,5);assert.equal(graph['@graph'].filter(x=>x['@type']==='LocalBusiness').length,4);assert.ok(!index.includes('aggregateRating'));
  assert.equal((index.match(/data-service-panel=/g)||[]).length,6);
  for(const node of graph['@graph'])assert.match(node.telephone,/^\+5411\d{8}$/);
