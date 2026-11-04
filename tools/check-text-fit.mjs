@@ -26,7 +26,7 @@ const server = createServer(async (req, res) => {
   catch { res.writeHead(404).end(); }
 }).listen(0, '127.0.0.1');
 await new Promise(r => server.once('listening', r));
-const base = `http://127.0.0.1:${server.address().port}/`;
+const base = process.env.BASE_URL || `http://127.0.0.1:${server.address().port}/`;
 
 function chromePath() {
   if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
