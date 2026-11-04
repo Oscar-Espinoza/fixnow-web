@@ -149,7 +149,7 @@ a.panel-row:hover strong{color:var(--blue-soft)}
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:clamp(56px,7vw,96px)}
 .stat{padding:clamp(28px,3vw,40px) 24px clamp(28px,3vw,40px) 0;display:flex;flex-direction:column;gap:10px;min-width:0}
 .stat+.stat{padding-left:24px;border-left:1px solid var(--line)}
-.stat strong{font-weight:800;font-size:clamp(44px,5vw,72px);line-height:.9;color:var(--blue);letter-spacing:-.03em}
+.stat strong{white-space:nowrap;font-weight:800;font-size:clamp(44px,5vw,72px);line-height:.9;color:var(--blue);letter-spacing:-.03em}
 .stat strong small{font-size:.36em;letter-spacing:0;margin-left:.12em}
 .stat span{font-size:14px;line-height:1.45;color:var(--body)}
 
@@ -182,7 +182,7 @@ a.panel-row:hover strong{color:var(--blue-soft)}
 .cta .g12{align-items:end;row-gap:32px;position:relative;z-index:1}
 .cta-title{grid-column:1/-1}
 .cta h2{font-size:clamp(44px,7vw,112px)}
-.cta-text{font-size:clamp(16px,1.3vw,18px);line-height:1.6;max-width:46ch}
+.cta-text{font-size:clamp(16px,1.3vw,18px);line-height:1.6;max-width:46ch;text-wrap:pretty}
 .cta .ghost{color:rgba(255,255,255,.035)}
 
 /* Footer (mirrors homepage) */
@@ -208,7 +208,7 @@ a.panel-row:hover strong{color:var(--blue-soft)}
 
 @media (max-width:1180px){
   .branches{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .branch h3{font-size:26px}
+  .branch h3{font-size:clamp(20px,4.4vw,26px)}
 }
 @media (max-width:899px){
   :root{--header-h:64px}
@@ -260,3 +260,29 @@ a.panel-row:hover strong{color:var(--blue-soft)}
   .foot-grid .foot-col:nth-child(4){flex-direction:row;flex-wrap:wrap;column-gap:20px}
   .foot-grid .foot-col:nth-child(4) .foot-h{width:100%;margin-bottom:6px}
 }
+/* Narrow phones: headings and actions fit the column (also with a desktop scrollbar). */
+@media (max-width:430px){
+  :root{--h1:min(42px,10.6vw)}
+  .btn-row{flex-direction:column;align-items:stretch}
+  .btn-row .btn{flex:none;width:100%;min-width:0;padding-inline:16px;white-space:normal;text-align:center}
+}
+@media (max-width:400px){
+  .stat{padding-right:12px}.stat+.stat{padding-left:12px}
+  .stat strong{font-size:clamp(34px,10.5vw,44px)}
+}
+/* Phones: the WhatsApp button lives in the sticky header next to the menu, always visible and never over content. */
+@media (max-width:560px){
+  .wa-float{top:calc((var(--header-h) - 44px) / 2);bottom:auto;right:calc(var(--gut) + 58px);width:44px;height:44px;box-shadow:none}
+  .wa-float svg{width:24px;height:24px}
+  .wa-float:hover{transform:none}
+}
+/* Headings wrap into even lines; no short word left alone. */
+h2.disp,h1.disp{text-wrap:balance}
+@media (max-width:430px){
+  :root{--h2:min(36px,9.6vw)}
+  .cta h2{font-size:clamp(30px,10vw,44px)}
+  .page-nosotros .cta h2{font-size:clamp(28px,9vw,40px)}
+  .panel strong{overflow-wrap:normal;white-space:nowrap;font-size:clamp(14px,4.6vw,17px)}
+}
+@media (min-width:561px) and (max-width:899px){ .branch h3{font-size:clamp(20px,4vw,26px)} }
+@media (max-width:380px){ .btn-row .btn{font-size:14px;gap:8px;padding-inline:14px} }
