@@ -4,7 +4,7 @@ const diagnosticData = {"desktop": [{"num": "01", "title": "Pantalla", "symptom"
 // Main WhatsApp (Belgrano). Repair buttons add the selected service to the message.
 const whatsappLink = text => 'https://wa.me/5491156327284?text=' + encodeURIComponent(text);
 function syncConsultLinks(service) {
-  document.querySelectorAll('[data-consult]').forEach(link => { link.href = whatsappLink(`Hola, me estoy comunicando desde la web de FixNow. Quiero consultar por: ${service}.`); });
+  document.querySelectorAll('[data-consult]').forEach(link => { link.href = whatsappLink(`Hola! Quiero consultar por: ${service}.`); });
 }
 let selectedIssue = 0;
 let selectedCamera = 'rear';
