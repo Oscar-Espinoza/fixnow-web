@@ -286,3 +286,15 @@ h2.disp,h1.disp{text-wrap:balance}
 }
 @media (min-width:561px) and (max-width:899px){ .branch h3{font-size:clamp(20px,4vw,26px)} }
 @media (max-width:380px){ .btn-row .btn{font-size:14px;gap:8px;padding-inline:14px} }
+/* Service landing pages (cambio-de-pantalla, cambio-de-bateria, vidrio-trasero) */
+.hero-photo.product{background:radial-gradient(120% 90% at 50% 35%,#2a2d33 0%,#18191c 70%)}
+.hero-photo.product img{object-fit:contain;object-position:50% 42%;padding:8px 8px 72px;transform:scale(1.45);transform-origin:50% 42%}
+.pay-note{margin-top:18px;font-size:14px;line-height:1.5;color:var(--grey-d)}
+.pay-note strong{color:#fff}
+.prose h3{font-size:clamp(17px,1.3vw,19px);font-weight:800;line-height:1.3;color:var(--black)}
+.prose * + h3{margin-top:28px}
+.prose h3 + p{margin-top:8px}
+.prose .others{margin-top:32px;font-size:15px}
+.prose .others a{color:var(--blue);font-weight:700}
+.cta-act{display:flex;flex-wrap:wrap;gap:12px}
+.page-cambio-de-bateria .hero-photo.product img{transform:scale(1.02)}

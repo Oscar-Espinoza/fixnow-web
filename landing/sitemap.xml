@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>{{SITE_URL}}/</loc></url><url><loc>{{SITE_URL}}/contacto</loc></url><url><loc>{{SITE_URL}}/nosotros</loc></url></urlset>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>{{SITE_URL}}/</loc></url><url><loc>{{SITE_URL}}/contacto</loc></url><url><loc>{{SITE_URL}}/nosotros</loc></url><url><loc>{{SITE_URL}}/cambio-de-pantalla</loc></url><url><loc>{{SITE_URL}}/cambio-de-bateria</loc></url><url><loc>{{SITE_URL}}/vidrio-trasero</loc></url></urlset>

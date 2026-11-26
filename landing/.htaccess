@@ -9,14 +9,17 @@ ErrorDocument 404 /404.html
   RewriteCond https://%{HTTP_HOST} !={{SITE_URL}} [NC]
   RewriteRule ^ {{SITE_URL}}%{REQUEST_URI} [R=301,L]
   # Clean URLs: /contacto and /nosotros (Google Ads) and /garantia (unlisted, linked only from the CRM) (with or without trailing slash or .html)
-  RewriteCond %{THE_REQUEST} \s/+(contacto|nosotros|garantia)\.html[?\s] [NC]
+  RewriteCond %{THE_REQUEST} \s/+(contacto|nosotros|garantia|cambio-de-pantalla|cambio-de-bateria|vidrio-trasero)\.html[?\s] [NC]
   RewriteRule ^ {{SITE_URL}}/%1 [R=301,L]
   RewriteRule ^contacto/?$ contacto.html [NC,L]
   RewriteRule ^nosotros/?$ nosotros.html [NC,L]
   RewriteRule ^garantia/?$ garantia.html [NC,L]
+  RewriteRule ^cambio-de-pantalla/?$ cambio-de-pantalla.html [NC,L]
+  RewriteRule ^cambio-de-bateria/?$ cambio-de-bateria.html [NC,L]
+  RewriteRule ^vidrio-trasero/?$ vidrio-trasero.html [NC,L]
   # Old ad addresses that Google Ads still uses (Natalia, 26/11). Temporary redirects that keep
-  # gclid/utm (Apache appends the query string). /pantallas/turnos will point to the screen page.
-  RewriteRule ^pantallas/turnos/?$ {{SITE_URL}}/ [R=302,L]
+  # gclid/utm (Apache appends the query string). /pantallas/turnos lands on the screen page.
+  RewriteRule ^pantallas/turnos/?$ {{SITE_URL}}/cambio-de-pantalla [R=302,L]
   RewriteRule ^contacto/whatsapp/?$ {{SITE_URL}}/contacto [R=302,L]
 </IfModule>
 <IfModule mod_mime.c>

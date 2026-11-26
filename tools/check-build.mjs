@@ -17,7 +17,7 @@ for(const [dir,site,staging]of [['dist','https://fixnow.com.ar',false],['dist-st
  const index=await readFile(dir+'/index.html','utf8'),privacy=await readFile(dir+'/privacidad.html','utf8'),htaccess=await readFile(dir+'/.htaccess','utf8'),robots=await readFile(dir+'/robots.txt','utf8');
  assert.match(index,/<title>Reparación de celulares en CABA \| FixNow<\/title>/);
  // Google Ads policy: pages stay brand-neutral and avoid technical-support wording.
- for(const page of ['index.html','contacto.html','nosotros.html','privacidad.html','garantia.html','404.html']){
+ for(const page of ['index.html','contacto.html','nosotros.html','privacidad.html','garantia.html','cambio-de-pantalla.html','cambio-de-bateria.html','vidrio-trasero.html','404.html']){
   const html=(await readFile(dir+'/'+page,'utf8')).replace(/apple-touch-icon[^"']*/g,'');
   assert.ok(!/iphone|ipad|apple|macbook|pro max|servicio t[eé]cnico|asistencia t[eé]cnica|soporte t[eé]cnico/i.test(html),page+' has brand or tech-support wording');
  }
@@ -67,10 +67,10 @@ for(const [dir,site,staging]of [['dist','https://fixnow.com.ar',false],['dist-st
  assert.equal((index.match(/WhatsApp 11 2842-0033/g)||[]).length,2);
  assert.ok(!index.includes('tel:+541128420033'));
  assert.match(index,/data-service-panel="2"[^]*?data-detail="time">Entre 1 y 3 h según el modelo</);
- for(const file of ['index.html','privacidad.html','garantia.html','404.html']){
+ for(const file of ['index.html','privacidad.html','garantia.html','cambio-de-pantalla.html','cambio-de-bateria.html','vidrio-trasero.html','404.html']){
   const html=await readFile(dir+'/'+file,'utf8');if(staging)assert.match(html,/<meta name="robots" content="noindex,nofollow">/);assert.ok(!/fonts\.googleapis\.com|fonts\.gstatic\.com|unpkg\.com/.test(html));
  }
- if(staging){assert.match(robots,/Disallow: \//);assert.match(htaccess,/X-Robots-Tag "noindex, nofollow"/)}else{assert.ok(!htaccess.includes('X-Robots-Tag'));assert.match(robots,/Allow: \//);assert.match(privacy,/noindex,follow/);{const g=await readFile(dir+'/garantia.html','utf8');assert.match(g,/noindex,nofollow/);assert.ok(!index.includes('garantia.html')&&!/href="\/garantia/.test(index),'garantia must stay unlisted');assert.ok(!(await readFile(dir+'/sitemap.xml','utf8')).includes('garantia'));}assert.ok(!index.includes('noindex'));}
+ if(staging){assert.match(robots,/Disallow: \//);assert.match(htaccess,/X-Robots-Tag "noindex, nofollow"/)}else{assert.ok(!htaccess.includes('X-Robots-Tag'));assert.match(robots,/Allow: \//);assert.match(privacy,/noindex,follow/);{for(const f of ['cambio-de-pantalla','cambio-de-bateria','vidrio-trasero']){const h=await readFile(dir+'/'+f+'.html','utf8');assert.ok(h.includes('crm.fixnow.com.ar/w.js')&&/assets\/medicion\.[0-9a-f]+\.js/.test(h),f+' needs w.js and medicion');assert.ok(h.includes('tel:+541156327284')&&h.includes('wa.me/5491156327284'),f+' needs call and WhatsApp');assert.ok(!/\$\s?\d/.test(h),f+' must not show prices');}assert.ok(!/garant/i.test(await readFile(dir+'/vidrio-trasero.html','utf8')),'vidrio-trasero must not mention warranty');assert.match(htaccess,/pantallas\/turnos\/\?\$ \S+\/cambio-de-pantalla \[R=302,L\]/);}{const g=await readFile(dir+'/garantia.html','utf8');assert.match(g,/noindex,nofollow/);assert.ok(!index.includes('garantia.html')&&!/href="\/garantia/.test(index),'garantia must stay unlisted');assert.ok(!(await readFile(dir+'/sitemap.xml','utf8')).includes('garantia'));}assert.ok(!index.includes('noindex'));}
  assert.equal(Object.keys(manifest).some(x=>x.startsWith('assets/vendor')),false);assert.equal(Object.keys(manifest).some(x=>x.endsWith('.png')&&x.startsWith('assets/phone-')),false);
  console.log('PASS',dir,Object.keys(manifest).length,'content hashes and complete references, SEO/staging/allowlist');
 }

@@ -11,7 +11,7 @@ import os from 'node:os';
 import {chromium} from 'playwright-core';
 
 const root = path.resolve('dist');
-const pages = ['index.html', 'contacto.html', 'nosotros.html', 'privacidad.html', '404.html'];
+const pages = ['index.html', 'contacto.html', 'nosotros.html', 'privacidad.html', 'garantia.html', 'cambio-de-pantalla.html', 'cambio-de-bateria.html', 'vidrio-trasero.html', '404.html'];
 const fast = process.argv.includes('--fast');
 const widths = [];
 for (let w = 320; w <= 1920; w += fast ? 40 : (w < 1000 ? 5 : 10)) widths.push(w);
