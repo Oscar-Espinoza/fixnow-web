@@ -3165,6 +3165,9 @@ footer a.footer-legal:hover {
 .diagnostic-detail [data-repair-replay]{order:1}
 .service-description .s52{order:2}
 .diagnostic-detail>[data-consult]{order:3}
+/* Link from each repair to its own page (pantalla, batería, vidrio trasero). */
+.service-more{order:2;align-self:flex-start;font-size:15px;font-weight:700;color:#005CE6;text-decoration:underline;text-underline-offset:3px}
+.service-more:hover{color:var(--black)}
 .diagnostic-detail .phone-opt-in{order:4}
 
 /* Real workshop photography leads the page; the service model stays below it. */
