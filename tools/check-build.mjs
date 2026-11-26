@@ -66,7 +66,7 @@ for(const [dir,site,staging]of [['dist','https://fixnow.com.ar',false],['dist-st
  assert.equal((index.match(/https:\/\/maps\.app\.goo\.gl\/UuMmBuNvhXpXYEUr6/g)||[]).length,3);
  assert.equal((index.match(/WhatsApp 11 2842-0033/g)||[]).length,2);
  assert.ok(!index.includes('tel:+541128420033'));
- assert.match(index,/data-service-panel="2"[^]*?data-detail="time">Entre 1 y 3 h según el modelo</);
+ assert.match(index,/data-service-panel="2"[^]*?data-detail="time">Entre 1 y 4 h según el modelo</);
  for(const file of ['index.html','privacidad.html','garantia.html','cambio-de-pantalla.html','cambio-de-bateria.html','vidrio-trasero.html','404.html']){
   const html=await readFile(dir+'/'+file,'utf8');if(staging)assert.match(html,/<meta name="robots" content="noindex,nofollow">/);assert.ok(!/fonts\.googleapis\.com|fonts\.gstatic\.com|unpkg\.com/.test(html));
  }
