@@ -17,8 +17,25 @@
       if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = [];
       t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
     }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+  }
+  // Herramienta de parámetros de Meta (assets/meta-param-builder.js, pedido de Jhon 27/11): antes de
+  // arrancar el píxel guarda la cookie _fbc cuando la visita llega con ?fbclid de un anuncio (o el
+  // navegador de Instagram/Facebook trae el clic). El píxel lee esa cookie y manda la fbc en cada evento.
+  var pixelStarted = false;
+  function startPixel() {
+    if (pixelStarted || !META_PIXEL || !window.fbq) return;
+    pixelStarted = true;
     window.fbq('init', META_PIXEL);
     window.fbq('track', 'PageView');
+  }
+  if (META_PIXEL) {
+    var pb = window.clientParamBuilder;
+    if (pb && typeof pb.processAndCollectAllParams === 'function') {
+      setTimeout(startPixel, 1500); // si tarda, el píxel arranca igual
+      try { Promise.resolve(pb.processAndCollectAllParams(location.href)).then(startPixel, startPixel); } catch (err) { startPixel(); }
+    } else {
+      startPixel();
+    }
   }
 
   // Etiqueta de Google (gtag.js), solo si ya está cargado el código AW-….
@@ -38,6 +55,7 @@
     var a = e.target && e.target.closest && e.target.closest('a[href]'); if (!a) return;
     if (!WA.test(a.getAttribute('href') || '')) return;
     var now = Date.now(); if (now - last < 2000) return; last = now;
+    startPixel();
     try { if (window.fbq) window.fbq('track', 'Contact', { content_name: 'WhatsApp', content_category: location.pathname }); } catch (err) {}
     try {
       if (window.gtag && GOOGLE_ADS && GOOGLE_WA_LABEL) {
