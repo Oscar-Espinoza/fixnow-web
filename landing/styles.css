@@ -4279,3 +4279,8 @@ body:has(.photo-lightbox[open]) .whatsapp-float { display: none; }
 }
 /* Recoleta: keep the FixNow sign and the window lettering whole in the tall desktop crop. */
 #sucursales .desktop .bcard .branch-photo[src*="branch-recoleta"] { object-position: 47% 50% !important; }
+
+/* One selling line under each repair's symptom; it gives way on very short desktop screens. */
+.service-pitch{font-weight:600;color:var(--black);line-height:1.45;margin:0}
+@media (min-width: 900px) and (max-height: 640px) { .diagnostic-detail .service-pitch { display: none; } }
+.service-conditions[hidden]{display:none !important}

@@ -54,7 +54,11 @@ for(const [dir,site,staging]of [['dist','https://fixnow.com.ar',false],['dist-st
  assert.ok(!index.includes('rating-value'));
  assert.match(index,/class="disp reviews-title"/);
  assert.match(index,/90 días de garantía por escrito/);
- assert.match(index,/Los repuestos electrónicos que instalamos cuentan con 90 días de garantía por defectos de fabricación\. No cubre daños por golpes, roturas, líquidos o mal uso\./);
+ assert.match(index,/Los repuestos electrónicos que instalamos cuentan con 90 días de garantía por defectos de fabricación\./);
+ assert.ok(!index.includes('No cubre daños'));
+ assert.ok(!/data-service-panel="2"[^]*?Garantía[^]*?data-service-panel="3"/.test(index));
+ assert.equal((index.match(/class="service-pitch"/g)||[]).length,6);
+ { const script=await readFile(new URL('../landing/script.js',import.meta.url),'utf8'); assert.match(script,/service-conditions[^]*?hidden = index === 2/); }
  assert.match(index,/3 cuotas sin interés con Visa y Mastercard bancarias/);
  assert.equal((index.match(/90 días por escrito<\/span>/g)||[]).length,4);
 

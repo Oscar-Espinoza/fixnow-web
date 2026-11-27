@@ -18,6 +18,8 @@ function selectIssue(index, options = {}) {
     issue.symptom = selectedCamera === 'front' ? 'Selfies borrosas o cámara frontal sin imagen.' : 'Fotos borrosas o cámara trasera sin imagen.';
   }
   root.querySelector('.camera-options').hidden = index !== 4;
+  // Back glass has no warranty: hide the warranty small print while it is selected.
+  root.querySelectorAll('.service-conditions').forEach(note => { note.hidden = index === 2; });
   root.querySelectorAll('[data-camera-view]').forEach(button => {
     button.setAttribute('aria-pressed', String(button.dataset.cameraView === selectedCamera));
   });
